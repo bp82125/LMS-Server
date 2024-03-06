@@ -1,0 +1,84 @@
+package com.ct467.libmansys.controllers
+
+import com.ct467.libmansys.dtos.RequestAuthor
+import com.ct467.libmansys.dtos.ResponseAuthor
+import com.ct467.libmansys.services.AuthorService
+import com.ct467.libmansys.system.ApiResponse
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatusCode
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
+
+@RestController
+@RequestMapping("\${api.endpoint.base-url}/authors")
+class AuthorController(
+    @Autowired private val authorService: AuthorService
+) {
+    @GetMapping("", "/")
+    fun findAllAuthors(): ResponseEntity<ApiResponse<List<ResponseAuthor>>> {
+        val authors = authorService.findAllAuthors()
+        return ResponseEntity.ok(
+            ApiResponse(
+                flag = true,
+                statusCode = HttpStatus.OK.value(),
+                data = authors,
+                message = "Found authors"
+            )
+        )
+    }
+
+    @GetMapping("/{id}")
+    fun findAuthorById(@PathVariable id: Long): ResponseEntity<ApiResponse<ResponseAuthor>> {
+        val author = authorService.findAuthorById(id)
+        return ResponseEntity.ok(
+            ApiResponse(
+                flag = true,
+                statusCode = HttpStatus.OK.value(),
+                data = author,
+                message = "Found author with id: $id"
+            )
+        )
+    }
+
+    @PostMapping("")
+    fun createAuthor(@RequestBody requestAuthor: RequestAuthor): ResponseEntity<ApiResponse<ResponseAuthor>> {
+        val createdAuthor = authorService.createAuthor(requestAuthor)
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+            ApiResponse(
+                flag = true,
+                statusCode = HttpStatus.CREATED.value(),
+                data = createdAuthor,
+                message = "Author created successfully"
+            )
+        )
+    }
+
+    @PutMapping("/{id}")
+    fun updateAuthor(
+        @PathVariable id: Long,
+        @RequestBody requestAuthor: RequestAuthor
+    ): ResponseEntity<ApiResponse<ResponseAuthor>> {
+        val updatedAuthor = authorService.updateAuthor(id, requestAuthor)
+        return ResponseEntity.ok(
+            ApiResponse(
+                flag = true,
+                statusCode = HttpStatus.OK.value(),
+                data = updatedAuthor,
+                message = "Author updated successfully"
+            )
+        )
+    }
+
+    @DeleteMapping("/{id}")
+    fun deleteAuthor(@PathVariable id: Long): ResponseEntity<ApiResponse<Void>> {
+        authorService.deleteAuthor(id)
+        return ResponseEntity.ok(
+            ApiResponse(
+                flag = true,
+                statusCode = HttpStatus.OK.value(),
+                message = "Author deleted successfully"
+            )
+        )
+    }
+}
