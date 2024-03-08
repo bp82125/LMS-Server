@@ -3,23 +3,17 @@ import jakarta.persistence.*
 
 
 @Entity
-@Table(name = "authors")
-class Author(
+@Table(name = "categories")
+class Category(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 1,
 
     @Column(name = "name", nullable = false)
-    val authorName: String,
-
-    @Column(name = "website", nullable = false)
-    val website: String = "",
-
-    @Column(name = "note", nullable = false)
-    val note: String = "",
+    val categoryName: String,
 
     @OneToMany(
-        mappedBy = "author",
+        mappedBy = "category",
         fetch = FetchType.LAZY,
         cascade = [CascadeType.PERSIST, CascadeType.MERGE],
         targetEntity = Book::class
@@ -28,26 +22,22 @@ class Author(
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is Author) return false
+        if (other !is Category) return false
 
         if (id != other.id) return false
-        if (authorName != other.authorName) return false
-        if (website != other.website) return false
-        if (note != other.note) return false
+        if (categoryName != other.categoryName) return false
 
         return true
     }
 
     override fun hashCode(): Int {
         var result = id.hashCode()
-        result = 31 * result + authorName.hashCode()
-        result = 31 * result + website.hashCode()
-        result = 31 * result + note.hashCode()
+        result = 31 * result + categoryName.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "Author(authorId=$id, authorName='$authorName', website='$website', note='$note')"
+        return "Category(categoryId=$id, categoryName='$categoryName')"
     }
 
     fun numberOfBooks(): Int {

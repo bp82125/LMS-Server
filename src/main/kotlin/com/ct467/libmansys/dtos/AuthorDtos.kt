@@ -11,12 +11,13 @@ data class RequestAuthor(
     val website: String,
 
     @field:Size(max = 255, message = "Note must not exceed 255 characters")
-    val note: String
+    val note: String,
 )
 
 data class ResponseAuthor(
     val id: Long,
     val authorName: String,
     val website: String,
-    val note: String
+    val note: String,
+    val numberOfBooks: Int
 )
