@@ -1,0 +1,60 @@
+package com.ct467.libmansys.models
+import jakarta.persistence.*
+
+@Entity
+@Table(name = "publishers")
+class Publisher(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 1,
+
+    @Column(name = "name", nullable = false)
+    val publisherName: String,
+
+    @Column(name = "address", nullable = false)
+    val address: String = "",
+
+    @Column(name = "email", nullable = false)
+    val email: String = "",
+
+    @Column(name = "representative_info", nullable = false)
+    val representativeInfo: String = "",
+
+    @OneToMany(
+        mappedBy = "publisher",
+        fetch = FetchType.LAZY,
+        cascade = [CascadeType.PERSIST, CascadeType.MERGE],
+        targetEntity = Book::class
+    )
+    val books: List<Book> = mutableListOf()
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Publisher) return false
+
+        if (id != other.id) return false
+        if (publisherName != other.publisherName) return false
+        if (address != other.address) return false
+        if (email != other.email) return false
+        if (representativeInfo != other.representativeInfo) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + publisherName.hashCode()
+        result = 31 * result + address.hashCode()
+        result = 31 * result + email.hashCode()
+        result = 31 * result + representativeInfo.hashCode()
+        return result
+    }
+
+    override fun toString(): String {
+        return "Publisher(publisherId=$id, publisherName='$publisherName', address='$address', email='$email', representativeInfo='$representativeInfo')"
+    }
+
+    fun numberOfBooks(): Int {
+        return books.size
+    }
+}

@@ -1,8 +1,10 @@
 package com.ct467.libmansys.controllers
 
 import com.ct467.libmansys.dtos.RequestAuthor
+import com.ct467.libmansys.dtos.RequestBook
 import com.ct467.libmansys.dtos.ResponseAuthor
-import com.ct467.libmansys.services.AuthorService
+import com.ct467.libmansys.dtos.ResponseBook
+import com.ct467.libmansys.services.BookService
 import com.ct467.libmansys.system.ApiResponse
 import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,73 +13,73 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("\${api.endpoint.base-url}/authors")
-class AuthorController(
-    @Autowired private val authorService: AuthorService
+@RequestMapping("\${api.endpoint.base-url}/books")
+class BookController(
+    @Autowired private val bookService: BookService
 ) {
     @GetMapping("", "/")
-    fun findAllAuthors(): ResponseEntity<ApiResponse<List<ResponseAuthor>>> {
-        val authors = authorService.findAllAuthors()
+    fun findAllBooks(): ResponseEntity<ApiResponse<List<ResponseBook>>> {
+        val books = bookService.findAllBooks()
         return ResponseEntity.ok(
             ApiResponse(
                 flag = true,
                 statusCode = HttpStatus.OK.value(),
-                data = authors,
-                message = "Found authors"
+                data = books,
+                message = "Found books"
             )
         )
     }
 
     @GetMapping("/{id}")
-    fun findAuthorById(@PathVariable id: Long): ResponseEntity<ApiResponse<ResponseAuthor>> {
-        val author = authorService.findAuthorById(id)
+    fun findBookById(@PathVariable id: Long): ResponseEntity<ApiResponse<ResponseBook>> {
+        val book = bookService.findBookById(id)
         return ResponseEntity.ok(
             ApiResponse(
                 flag = true,
                 statusCode = HttpStatus.OK.value(),
-                data = author,
-                message = "Found author with id: $id"
+                data = book,
+                message = "Found book with id: $id"
             )
         )
     }
 
     @PostMapping("")
-    fun createAuthor(@Valid @RequestBody requestAuthor: RequestAuthor): ResponseEntity<ApiResponse<ResponseAuthor>> {
-        val createdAuthor = authorService.createAuthor(requestAuthor)
+    fun createBook(@Valid @RequestBody requestBook: RequestBook): ResponseEntity<ApiResponse<ResponseBook>> {
+        val createdBook = bookService.createBook(requestBook)
         return ResponseEntity.status(HttpStatus.CREATED).body(
             ApiResponse(
                 flag = true,
                 statusCode = HttpStatus.CREATED.value(),
-                data = createdAuthor,
-                message = "Author created successfully"
+                data = createdBook,
+                message = "Book created successfully"
             )
         )
     }
 
     @PutMapping("/{id}")
-    fun updateAuthor(
+    fun updateBook(
         @PathVariable id: Long,
-        @Valid @RequestBody requestAuthor: RequestAuthor
-    ): ResponseEntity<ApiResponse<ResponseAuthor>> {
-        val updatedAuthor = authorService.updateAuthor(id, requestAuthor)
+        @Valid @RequestBody requestBook: RequestBook
+    ): ResponseEntity<ApiResponse<RequestBook>> {
+        val updatedBook = bookService.updateBook(id, requestBook)
         return ResponseEntity.ok(
             ApiResponse(
                 flag = true,
                 statusCode = HttpStatus.OK.value(),
-                data = updatedAuthor,
-                message = "Author updated successfully"
+                data = requestBook,
+                message = "Book updated successfully"
             )
         )
     }
 
     @DeleteMapping("/{id}")
-    fun deleteAuthor(@PathVariable id: Long): ResponseEntity<ApiResponse<Void>> {
-        authorService.deleteAuthor(id)
+    fun deleteBook(@PathVariable id: Long): ResponseEntity<ApiResponse<Void>> {
+        bookService.deleteBook(id)
         return ResponseEntity.ok(
             ApiResponse(
                 flag = true,
                 statusCode = HttpStatus.OK.value(),
-                message = "Author deleted successfully"
+                message = "Book deleted successfully"
             )
         )
     }

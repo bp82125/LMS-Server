@@ -6,7 +6,7 @@ import com.ct467.libmansys.models.Author
 
 fun RequestAuthor.toEntity(id: Long = 0): Author {
     return Author(
-        authorId = id,
+        id = id,
         authorName = this.authorName,
         website = this.website,
         note = this.note
@@ -15,9 +15,10 @@ fun RequestAuthor.toEntity(id: Long = 0): Author {
 
 fun Author.toResponse(): ResponseAuthor {
     return ResponseAuthor(
-        id = this.authorId,
+        id = this.id,
         authorName = this.authorName,
         website = this.website,
-        note = this.note
+        note = this.note,
+        numberOfBooks = this.numberOfBooks()
     )
 }

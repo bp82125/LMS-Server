@@ -7,7 +7,7 @@ import jakarta.persistence.*
 class Author(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val authorId: Long = 1,
+    val id: Long = 1,
 
     @Column(name = "name", nullable = false)
     val authorName: String,
@@ -16,13 +16,21 @@ class Author(
     val website: String = "",
 
     @Column(name = "note", nullable = false)
-    val note: String = ""
+    val note: String = "",
+
+    @OneToMany(
+        mappedBy = "author",
+        fetch = FetchType.LAZY,
+        cascade = [CascadeType.PERSIST, CascadeType.MERGE],
+        targetEntity = Book::class
+    )
+    val books: List<Book> = mutableListOf()
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Author) return false
 
-        if (authorId != other.authorId) return false
+        if (id != other.id) return false
         if (authorName != other.authorName) return false
         if (website != other.website) return false
         if (note != other.note) return false
@@ -31,7 +39,7 @@ class Author(
     }
 
     override fun hashCode(): Int {
-        var result = authorId.hashCode()
+        var result = id.hashCode()
         result = 31 * result + authorName.hashCode()
         result = 31 * result + website.hashCode()
         result = 31 * result + note.hashCode()
@@ -39,6 +47,10 @@ class Author(
     }
 
     override fun toString(): String {
-        return "Author(authorId=$authorId, authorName='$authorName', website='$website', note='$note')"
+        return "Author(authorId=$id, authorName='$authorName', website='$website', note='$note')"
+    }
+
+    fun numberOfBooks(): Int {
+        return books.size
     }
 }

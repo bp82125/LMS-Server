@@ -6,14 +6,15 @@ import com.ct467.libmansys.models.Category
 
 fun RequestCategory.toEntity(id: Long = 0): Category {
     return Category(
-        categoryId = id,
+        id = id,
         categoryName = this.categoryName,
     )
 }
 
 fun Category.toResponse(): ResponseCategory {
     return ResponseCategory(
-        id = this.categoryId,
-        categoryName = this.categoryName
+        id = this.id,
+        categoryName = this.categoryName,
+        numberOfBooks = this.numberOfBooks()
     )
 }
