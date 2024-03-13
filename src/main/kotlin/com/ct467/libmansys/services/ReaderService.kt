@@ -54,10 +54,15 @@ class ReaderService(
     }
 
     fun deleteReader(readerId: Long) {
-        if (!readerRepository.existsById(readerId)) {
-            throw EntityWithIdNotFoundException(objectName = "Reader", id = readerId)
+        val reader = readerRepository
+            .findById(readerId)
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Reader", id = readerId) }
+
+        reader?.libraryCard?.let {
+            libraryCardRepository.deleteById(it.cardNumber)
         }
 
+        reader.removeLibraryCard()
         return readerRepository.deleteById(readerId)
     }
 }

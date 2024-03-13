@@ -42,4 +42,9 @@ class Reader(
     override fun toString(): String {
         return "Reader(readerId=${id}d, readerName='$readerName', address='$address', cardNumber='$libraryCard')"
     }
+
+    fun removeLibraryCard() {
+        this.libraryCard?.reader = null
+        this.libraryCard = null
+    }
 }

@@ -48,11 +48,12 @@ class LibraryCardService(
             startDate = LocalDate.now()
         )
 
+        val createdLibraryCard = libraryCardRepository.save(libraryCard)
+
         reader
-            .apply { this.libraryCard = libraryCard }
+            .apply { this.libraryCard = createdLibraryCard }
             .let { readerRepository.save(it) }
 
-        val createdLibraryCard = libraryCardRepository.save(libraryCard)
         return createdLibraryCard.toResponse()
     }
 
@@ -87,7 +88,8 @@ class LibraryCardService(
         val libraryCard = libraryCardRepository.findById(cardNumber)
             .orElseThrow { EntityWithIdNotFoundException(objectName = "Library card", id = cardNumber) }
 
-        libraryCard.removeReader()
+        reader.removeLibraryCard()
+        readerRepository.save(reader)
 
         return libraryCardRepository.deleteById(cardNumber)
     }

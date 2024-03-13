@@ -19,8 +19,8 @@ class LibraryCard(
     @Column(name = "note", nullable = false)
     var note: String = "",
 
-    @OneToOne(mappedBy = "libraryCard")
-    var reader: Reader,
+    @OneToOne(mappedBy = "libraryCard", cascade = [CascadeType.ALL])
+    var reader: Reader? = null,
 
 ) {
 
@@ -49,9 +49,4 @@ class LibraryCard(
     override fun toString(): String {
         return "LibraryCard(cardNumber=$cardNumber, startDate=$startDate, expirationDate=$expirationDate, note='$note', reader=$reader)"
     }
-
-    fun removeReader() {
-        this.reader.libraryCard = null
-    }
-
 }
