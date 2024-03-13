@@ -13,6 +13,7 @@ data class RequestLibraryCard(
 )
 
 data class ResponseLibraryCard(
+    val readerId: Long?,
     val cardNumber: Long,
     val startDate: LocalDate,
     val expirationDate: LocalDate,
