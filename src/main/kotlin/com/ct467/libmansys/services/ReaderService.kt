@@ -32,22 +32,17 @@ class ReaderService(
     }
 
     fun createReader(requestReader: RequestReader): ResponseReader {
-        val libraryCard = libraryCardRepository
-            .findById(requestReader.libraryCardNumber)
-            .orElseThrow { EntityWithIdNotFoundException(objectName = "LibraryCard", id = requestReader.libraryCardNumber) }
-
-        val reader = requestReader.toEntity(
-            libraryCard = libraryCard
-        )
-
+        val reader = requestReader.toEntity()
         val createdReader = readerRepository.save(reader)
         return createdReader.toResponse()
     }
 
     fun updateReader(readerId: Long, requestReader: RequestReader): ResponseReader {
-        val libraryCard = libraryCardRepository
-            .findById(requestReader.libraryCardNumber)
-            .orElseThrow { EntityWithIdNotFoundException(objectName = "LibraryCard", id = requestReader.libraryCardNumber) }
+        val libraryCard = requestReader.libraryCardNumber?.let {
+            libraryCardRepository
+                .findById(it)
+                .orElseThrow { EntityWithIdNotFoundException(objectName = "LibraryCard", id = requestReader.libraryCardNumber) }
+        }
 
         val reader = requestReader.toEntity(
             id = readerId,

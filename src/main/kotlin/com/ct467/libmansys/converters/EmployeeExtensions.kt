@@ -6,7 +6,7 @@ import com.ct467.libmansys.models.Employee
 
 fun RequestEmployee.toEntity(employeeId: Long = 0): Employee {
     return Employee(
-        employeeId = employeeId,
+        id = employeeId,
         fullName = this.fullName,
         birthDate = this.birthDate,
         phoneNumber = this.phoneNumber
@@ -15,7 +15,7 @@ fun RequestEmployee.toEntity(employeeId: Long = 0): Employee {
 
 fun Employee.toResponse(): ResponseEmployee {
     return ResponseEmployee(
-        employeeId = this.employeeId,
+        employeeId = this.id,
         fullName = this.fullName,
         birthDate = this.birthDate,
         phoneNumber = this.phoneNumber

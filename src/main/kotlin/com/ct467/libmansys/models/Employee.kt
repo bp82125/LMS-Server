@@ -8,22 +8,22 @@ import java.time.LocalDate
 class Employee(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val employeeId: Long = 1,
+    var id: Long = 1,
 
     @Column(name = "full_name", nullable = false)
-    val fullName: String,
+    var fullName: String,
 
     @Column(name = "birth_date", nullable = false)
-    val birthDate: LocalDate,
+    var birthDate: LocalDate,
 
     @Column(name = "phone_number", nullable = false)
-    val phoneNumber: String
+    var phoneNumber: String
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Employee) return false
 
-        if (employeeId != other.employeeId) return false
+        if (id != other.id) return false
         if (fullName != other.fullName) return false
         if (birthDate != other.birthDate) return false
         if (phoneNumber != other.phoneNumber) return false
@@ -32,7 +32,7 @@ class Employee(
     }
 
     override fun hashCode(): Int {
-        var result = employeeId.hashCode()
+        var result = id.hashCode()
         result = 31 * result + fullName.hashCode()
         result = 31 * result + birthDate.hashCode()
         result = 31 * result + phoneNumber.hashCode()
@@ -40,6 +40,6 @@ class Employee(
     }
 
     override fun toString(): String {
-        return "Employee(employeeId=$employeeId, fullName='$fullName', birthDate=$birthDate, phoneNumber='$phoneNumber')"
+        return "Employee(employeeId=$id, fullName='$fullName', birthDate=$birthDate, phoneNumber='$phoneNumber')"
     }
 }

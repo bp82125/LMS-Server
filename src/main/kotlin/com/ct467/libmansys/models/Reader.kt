@@ -7,23 +7,23 @@ import jakarta.persistence.*
 class Reader(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val readerId: Long = 1,
+    var id: Long = 1,
 
     @Column(name = "name", nullable = false)
-    val readerName: String,
+    var readerName: String,
 
     @Column(name = "address", nullable = false)
-    val address: String = "",
+    var address: String = "",
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    val libraryCard: LibraryCard
+    @OneToOne(cascade = [CascadeType.ALL])
+    @JoinColumn(name = "card_number", referencedColumnName = "cardNumber")
+    var libraryCard: LibraryCard? = null
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Reader) return false
 
-        if (readerId != other.readerId) return false
+        if (id != other.id) return false
         if (readerName != other.readerName) return false
         if (address != other.address) return false
         if (libraryCard != other.libraryCard) return false
@@ -32,7 +32,7 @@ class Reader(
     }
 
     override fun hashCode(): Int {
-        var result = readerId.hashCode()
+        var result = id.hashCode()
         result = 31 * result + readerName.hashCode()
         result = 31 * result + address.hashCode()
         result = 31 * result + libraryCard.hashCode()
@@ -40,6 +40,6 @@ class Reader(
     }
 
     override fun toString(): String {
-        return "Reader(readerId=${readerId}d, readerName='$readerName', address='$address', cardNumber='$libraryCard')"
+        return "Reader(readerId=${id}d, readerName='$readerName', address='$address', cardNumber='$libraryCard')"
     }
 }

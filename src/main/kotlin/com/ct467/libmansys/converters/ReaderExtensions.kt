@@ -5,9 +5,9 @@ import com.ct467.libmansys.dtos.ResponseReader
 import com.ct467.libmansys.models.LibraryCard
 import com.ct467.libmansys.models.Reader
 
-fun RequestReader.toEntity(id: Long = 0, libraryCard: LibraryCard): Reader {
+fun RequestReader.toEntity(id: Long = 0, libraryCard: LibraryCard? = null): Reader {
     return Reader(
-        readerId = id,
+        id = id,
         readerName = this.readerName,
         address = this.address,
         libraryCard = libraryCard
@@ -16,9 +16,9 @@ fun RequestReader.toEntity(id: Long = 0, libraryCard: LibraryCard): Reader {
 
 fun Reader.toResponse(): ResponseReader {
     return ResponseReader(
-        readerId = this.readerId,
+        readerId = this.id,
         readerName = this.readerName,
         address = this.address,
-        libraryCardNumber = this.libraryCard.toResponse()
+        libraryCard = this.libraryCard?.toResponse()
     )
 }
