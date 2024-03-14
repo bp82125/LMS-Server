@@ -5,7 +5,6 @@ import com.ct467.libmansys.converters.toResponse
 import com.ct467.libmansys.dtos.RequestCategory
 import com.ct467.libmansys.dtos.ResponseCategory
 import com.ct467.libmansys.exceptions.EntityWithIdNotFoundException
-import com.ct467.libmansys.models.Category
 import com.ct467.libmansys.repositories.CategoryRepository
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
@@ -25,7 +24,7 @@ class CategoryService(
     fun findCategoryById(id: Long): ResponseCategory {
         val category = categoryRepository
             .findById(id)
-            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Category", id = id) }
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Category", id = "$id") }
 
         return category.toResponse()
     }
@@ -38,7 +37,7 @@ class CategoryService(
 
     fun updateCategory(id: Long, requestCategory: RequestCategory): ResponseCategory {
         if (!categoryRepository.existsById(id)) {
-            throw EntityWithIdNotFoundException("Category", id)
+            throw EntityWithIdNotFoundException("Category", "$id")
         }
 
         val category = requestCategory.toEntity(id)
@@ -48,7 +47,7 @@ class CategoryService(
 
     fun deleteCategory(id: Long){
         if (!categoryRepository.existsById(id)) {
-            throw EntityWithIdNotFoundException("Category", id)
+            throw EntityWithIdNotFoundException("Category", "$id")
         }
 
         return categoryRepository.deleteById(id)

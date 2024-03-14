@@ -24,7 +24,7 @@ class PublisherService(
     fun findPublisherById(id: Long): ResponsePublisher {
         val publisher = publisherRepository
             .findById(id)
-            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Publisher", id = id) }
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Publisher", id = "$id") }
 
         return publisher.toResponse()
     }
@@ -37,7 +37,7 @@ class PublisherService(
 
     fun updatePublisher(id: Long, requestPublisher: RequestPublisher): ResponsePublisher {
         if (!publisherRepository.existsById(id)) {
-            throw EntityWithIdNotFoundException("Publisher", id)
+            throw EntityWithIdNotFoundException("Publisher", "$id")
         }
 
         val publisher = requestPublisher.toEntity(id)
@@ -47,7 +47,7 @@ class PublisherService(
 
     fun deletePublisher(id: Long){
         if (!publisherRepository.existsById(id)) {
-            throw EntityWithIdNotFoundException("Publisher", id)
+            throw EntityWithIdNotFoundException("Publisher", "$id")
         }
 
         return publisherRepository.deleteById(id)

@@ -23,10 +23,10 @@ class ReaderService(
             .map { reader -> reader.toResponse() }
     }
 
-    fun findReaderById(readerId: Long): ResponseReader {
+    fun findReaderById(id: Long): ResponseReader {
         val reader = readerRepository
-            .findById(readerId)
-            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Reader", id = readerId) }
+            .findById(id)
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Reader", id = "$id") }
 
         return reader.toResponse()
     }
@@ -37,15 +37,15 @@ class ReaderService(
         return createdReader.toResponse()
     }
 
-    fun updateReader(readerId: Long, requestReader: RequestReader): ResponseReader {
+    fun updateReader(id: Long, requestReader: RequestReader): ResponseReader {
         val libraryCard = requestReader.libraryCardNumber?.let {
             libraryCardRepository
                 .findById(it)
-                .orElseThrow { EntityWithIdNotFoundException(objectName = "LibraryCard", id = requestReader.libraryCardNumber) }
+                .orElseThrow { EntityWithIdNotFoundException(objectName = "LibraryCard", id = "$requestReader.libraryCardNumber") }
         }
 
         val reader = requestReader.toEntity(
-            id = readerId,
+            id = id,
             libraryCard = libraryCard
         )
 
@@ -53,16 +53,16 @@ class ReaderService(
         return updatedReader.toResponse()
     }
 
-    fun deleteReader(readerId: Long) {
+    fun deleteReader(id: Long) {
         val reader = readerRepository
-            .findById(readerId)
-            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Reader", id = readerId) }
+            .findById(id)
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Reader", id = "$id") }
 
         reader?.libraryCard?.let {
             libraryCardRepository.deleteById(it.cardNumber)
         }
 
         reader.removeLibraryCard()
-        return readerRepository.deleteById(readerId)
+        return readerRepository.deleteById(id)
     }
 }

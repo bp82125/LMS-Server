@@ -24,7 +24,7 @@ class AuthorService(
     fun findAuthorById(id: Long): ResponseAuthor {
         val author = authorRepository
             .findById(id)
-            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Author", id = id) }
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Author", id = "$id") }
 
         return author.toResponse()
     }
@@ -37,7 +37,7 @@ class AuthorService(
 
     fun updateAuthor(id: Long, requestAuthor: RequestAuthor): ResponseAuthor {
         if (!authorRepository.existsById(id)) {
-            throw EntityWithIdNotFoundException("Author", id)
+            throw EntityWithIdNotFoundException("Author", "$id")
         }
 
         val author = requestAuthor.toEntity(id)
@@ -47,7 +47,7 @@ class AuthorService(
 
     fun deleteAuthor(id: Long){
         if (!authorRepository.existsById(id)) {
-            throw EntityWithIdNotFoundException("Author", id)
+            throw EntityWithIdNotFoundException("Author", "$id")
         }
 
         return authorRepository.deleteById(id)
