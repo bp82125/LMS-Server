@@ -6,19 +6,19 @@ import jakarta.persistence.*
 class Publisher(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 1,
+    var id: Long = 1,
 
     @Column(name = "name", nullable = false)
-    val publisherName: String,
+    var publisherName: String,
 
     @Column(name = "address", nullable = false)
-    val address: String = "",
+    var address: String = "",
 
     @Column(name = "email", nullable = false)
-    val email: String = "",
+    var email: String = "",
 
     @Column(name = "representative_info", nullable = false)
-    val representativeInfo: String = "",
+    var representativeInfo: String = "",
 
     @OneToMany(
         mappedBy = "publisher",

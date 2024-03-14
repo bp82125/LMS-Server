@@ -7,10 +7,10 @@ import jakarta.persistence.*
 class Category(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 1,
+    var id: Long = 1,
 
     @Column(name = "name", nullable = false)
-    val categoryName: String,
+    var categoryName: String,
 
     @OneToMany(
         mappedBy = "category",
@@ -18,7 +18,7 @@ class Category(
         cascade = [CascadeType.PERSIST, CascadeType.MERGE],
         targetEntity = Book::class
     )
-    val books: List<Book> = mutableListOf()
+    var books: List<Book> = mutableListOf()
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

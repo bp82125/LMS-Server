@@ -7,25 +7,25 @@ import jakarta.persistence.*
 class Book(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 1,
+    var id: Long = 1,
 
     @Column(name = "name", nullable = false)
-    val bookName: String,
+    var bookName: String,
 
     @Column(name = "year", nullable = false)
-    val publicationYear: Int,
+    var publicationYear: Int,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
-    val category: Category,
+    var category: Category,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
-    val author: Author,
+    var author: Author,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publisher_id")
-    val publisher: Publisher
+    var publisher: Publisher
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

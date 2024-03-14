@@ -7,16 +7,16 @@ import jakarta.persistence.*
 class Author(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 1,
+    var id: Long = 1,
 
     @Column(name = "name", nullable = false)
-    val authorName: String,
+    var authorName: String,
 
     @Column(name = "website", nullable = false)
-    val website: String = "",
+    var website: String = "",
 
     @Column(name = "note", nullable = false)
-    val note: String = "",
+    var note: String = "",
 
     @OneToMany(
         mappedBy = "author",
