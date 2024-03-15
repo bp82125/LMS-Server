@@ -28,7 +28,7 @@ class EmployeeController(
         )
     }
 
-    @GetMapping("/{employeeId}")
+    @GetMapping("/{employeeId}", "/{employeeId}/")
     fun findEmployeeById(@PathVariable employeeId: Long): ResponseEntity<ApiResponse<ResponseEmployee>> {
         val employee = employeeService.findEmployeeById(employeeId)
         return ResponseEntity.ok(
@@ -41,7 +41,7 @@ class EmployeeController(
         )
     }
 
-    @PostMapping("")
+    @PostMapping("", "/")
     fun createEmployee(@Valid @RequestBody requestEmployee: RequestEmployee): ResponseEntity<ApiResponse<ResponseEmployee>> {
         val createdEmployee = employeeService.createEmployee(requestEmployee)
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -54,7 +54,7 @@ class EmployeeController(
         )
     }
 
-    @PutMapping("/{employeeId}")
+    @PutMapping("/{employeeId}", "/{employeeId}/")
     fun updateEmployee(
         @PathVariable employeeId: Long,
         @Valid @RequestBody requestEmployee: RequestEmployee
@@ -70,7 +70,7 @@ class EmployeeController(
         )
     }
 
-    @DeleteMapping("/{employeeId}")
+    @DeleteMapping("/{employeeId}", "/{employeeId}/")
     fun deleteEmployee(@PathVariable employeeId: Long): ResponseEntity<ApiResponse<Void>> {
         employeeService.deleteEmployee(employeeId)
         return ResponseEntity.ok(

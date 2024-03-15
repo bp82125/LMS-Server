@@ -28,7 +28,7 @@ class AuthorController(
         )
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}", "/{id}/")
     fun findAuthorById(@PathVariable id: Long): ResponseEntity<ApiResponse<ResponseAuthor>> {
         val author = authorService.findAuthorById(id)
         return ResponseEntity.ok(
@@ -41,7 +41,7 @@ class AuthorController(
         )
     }
 
-    @PostMapping("")
+    @PostMapping("", "/")
     fun createAuthor(@Valid @RequestBody requestAuthor: RequestAuthor): ResponseEntity<ApiResponse<ResponseAuthor>> {
         val createdAuthor = authorService.createAuthor(requestAuthor)
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -54,7 +54,7 @@ class AuthorController(
         )
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}", "/{id}/")
     fun updateAuthor(
         @PathVariable id: Long,
         @Valid @RequestBody requestAuthor: RequestAuthor
@@ -70,7 +70,7 @@ class AuthorController(
         )
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}", "/{id}/")
     fun deleteAuthor(@PathVariable id: Long): ResponseEntity<ApiResponse<Void>> {
         authorService.deleteAuthor(id)
         return ResponseEntity.ok(
