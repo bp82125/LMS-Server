@@ -1,19 +1,23 @@
 package com.ct467.libmansys.models
 
+import com.ct467.libmansys.models.compositekeys.CheckoutDetailId
 import jakarta.persistence.*
+import java.io.Serializable
 import java.time.LocalDate
 
 @Entity
 @Table(name = "checkout_details")
+@IdClass(CheckoutDetailId::class)
 class CheckoutDetail(
+    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "checkout_id")
-    @Id
     var checkout: Checkout,
 
+    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
-    @Id
+
     var book: Book,
 
     @Column(name = "note")
@@ -24,7 +28,7 @@ class CheckoutDetail(
 
     @Column(name = "return_date")
     var returnDate: LocalDate? = null
-)  {
+): Serializable  {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

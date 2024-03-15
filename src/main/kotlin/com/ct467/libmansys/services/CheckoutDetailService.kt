@@ -5,6 +5,7 @@ import com.ct467.libmansys.converters.toResponse
 import com.ct467.libmansys.dtos.RequestCheckoutDetail
 import com.ct467.libmansys.dtos.ResponseCheckoutDetail
 import com.ct467.libmansys.exceptions.EntityWithIdNotFoundException
+import com.ct467.libmansys.models.compositekeys.CheckoutDetailId
 import com.ct467.libmansys.repositories.BookRepository
 import com.ct467.libmansys.repositories.CheckoutDetailRepository
 import com.ct467.libmansys.repositories.CheckoutRepository
@@ -26,7 +27,7 @@ class CheckoutDetailService(
 
     fun findDetailByIds(checkoutId: Long, bookId: Long): ResponseCheckoutDetail {
         val checkoutDetail = checkoutDetailRepository
-            .findByCheckout_IdAndBook_Id(checkoutId, bookId)
+            .findById(CheckoutDetailId(checkoutId, bookId))
             .orElseThrow { EntityWithIdNotFoundException(objectName = "Checkout detail", id = "checkout_id: $checkoutId, book_id: $bookId") }
 
         return checkoutDetail.toResponse()
@@ -48,10 +49,10 @@ class CheckoutDetailService(
 
     fun updateCheckoutDetail(checkoutId: Long, bookId: Long, requestCheckoutDetail: RequestCheckoutDetail): ResponseCheckoutDetail {
         val checkoutDetail = checkoutDetailRepository
-            .findByCheckout_IdAndBook_Id(checkoutId, bookId)
+            .findById(CheckoutDetailId(checkoutId, bookId))
             .orElseThrow { EntityWithIdNotFoundException(objectName = "Checkout detail", id = "checkout_id: $checkoutId, book_id: $bookId") }
             .apply {
-                note = "$requestCheckoutDetail.note"
+                note = requestCheckoutDetail.note.toString()
                 if (!returned && requestCheckoutDetail.returned) {
                     returned = true
                     returnDate = LocalDate.now()
@@ -62,10 +63,10 @@ class CheckoutDetailService(
     }
 
     fun deleteCheckoutDetail(checkoutId: Long, bookId: Long){
-        if(!checkoutDetailRepository.existsByCheckout_IdAndBook_Id(checkoutId, bookId)){
+        if(!checkoutDetailRepository.existsById(CheckoutDetailId(checkoutId, bookId))){
             throw EntityWithIdNotFoundException(objectName = "Checkout detail", id = "checkout_id: $checkoutId, book_id: $bookId")
         }
 
-        return checkoutDetailRepository.deleteByCheckout_IdAndBook_Id(checkoutId, bookId)
+        return checkoutDetailRepository.deleteById(CheckoutDetailId(checkoutId, bookId))
     }
 }

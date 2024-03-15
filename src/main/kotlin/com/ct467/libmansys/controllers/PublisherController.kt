@@ -4,6 +4,7 @@ import com.ct467.libmansys.dtos.RequestPublisher
 import com.ct467.libmansys.dtos.ResponsePublisher
 import com.ct467.libmansys.services.PublisherService
 import com.ct467.libmansys.system.ApiResponse
+import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
@@ -42,7 +43,7 @@ class PublisherController(
     }
 
     @PostMapping("")
-    fun createPublisher(@RequestBody requestPublisher: RequestPublisher
+    fun createPublisher(@Valid @RequestBody requestPublisher: RequestPublisher
     ): ResponseEntity<ApiResponse<ResponsePublisher>> {
         val createdPublisher = publisherService.createPublisher(requestPublisher)
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -58,7 +59,7 @@ class PublisherController(
     @PutMapping("/{id}")
     fun updatePublisher(
         @PathVariable id: Long,
-        @RequestBody requestPublisher: RequestPublisher
+        @Valid @RequestBody requestPublisher: RequestPublisher
     ): ResponseEntity<ApiResponse<ResponsePublisher>> {
         val updatedPublisher = publisherService.updatePublisher(id, requestPublisher)
         return ResponseEntity.ok(

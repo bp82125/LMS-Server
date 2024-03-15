@@ -4,6 +4,7 @@ import com.ct467.libmansys.dtos.RequestCategory
 import com.ct467.libmansys.dtos.ResponseCategory
 import com.ct467.libmansys.services.CategoryService
 import com.ct467.libmansys.system.ApiResponse
+import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -41,7 +42,7 @@ class CategoryController(
     }
 
     @PostMapping("")
-    fun createCategory(@RequestBody requestCategory: RequestCategory): ResponseEntity<ApiResponse<ResponseCategory>> {
+    fun createCategory(@RequestBody @Valid requestCategory: RequestCategory): ResponseEntity<ApiResponse<ResponseCategory>> {
         val createdCategory = categoryService.createCategory(requestCategory)
         return ResponseEntity.status(HttpStatus.CREATED).body(
             ApiResponse(
@@ -56,7 +57,7 @@ class CategoryController(
     @PutMapping("/{id}")
     fun updateCategory(
         @PathVariable id: Long,
-        @RequestBody requestCategory: RequestCategory
+        @RequestBody @Valid requestCategory: RequestCategory
     ): ResponseEntity<ApiResponse<ResponseCategory>> {
         val updatedCategory = categoryService.updateCategory(id, requestCategory)
         return ResponseEntity.ok(
