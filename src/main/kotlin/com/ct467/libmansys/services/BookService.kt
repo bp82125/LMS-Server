@@ -29,21 +29,21 @@ class BookService(
         return bookRepository
             .findById(id)
             .map { it.toResponse() }
-            .orElseThrow { EntityWithIdNotFoundException(objectName = "Book", id = id) }
+            .orElseThrow { EntityWithIdNotFoundException(objectName = "Book", id = "$id") }
     }
 
     fun createBook(requestBook: RequestBook): ResponseBook {
         val author = authorRepository
             .findById(requestBook.authorId)
-            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Author", id = requestBook.authorId) }
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Author", id = "$requestBook.authorId") }
 
         val publisher = publisherRepository
             .findById(requestBook.publisherId)
-            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Publisher", id = requestBook.publisherId) }
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Publisher", id = "$requestBook.publisherId") }
 
         val category = categoryRepository
             .findById(requestBook.categoryId)
-            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Category", id = requestBook.categoryId) }
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Category", id = "$requestBook.categoryId") }
 
         val book = requestBook.toEntity(
             author = author,
@@ -58,15 +58,15 @@ class BookService(
     fun updateBook(id: Long, requestBook: RequestBook): ResponseBook {
         val author = authorRepository
             .findById(requestBook.authorId)
-            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Author", id = id) }
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Author", id = "$id") }
 
         val publisher = publisherRepository
             .findById(requestBook.publisherId)
-            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Publisher", id = id) }
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Publisher", id = "$id") }
 
         val category = categoryRepository
             .findById(requestBook.categoryId)
-            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Category", id = id) }
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Category", id = "$id") }
 
         val book = requestBook.toEntity(
             id = id,
@@ -81,7 +81,7 @@ class BookService(
 
     fun deleteBook(id: Long){
         if(!bookRepository.existsById(id)){
-            throw EntityWithIdNotFoundException(objectName =  "Book", id = id)
+            throw EntityWithIdNotFoundException(objectName =  "Book", id = "$id")
         }
 
         bookRepository.deleteById(id)

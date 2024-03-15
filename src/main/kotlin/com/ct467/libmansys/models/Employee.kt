@@ -17,7 +17,7 @@ class Employee(
     var birthDate: LocalDate,
 
     @Column(name = "phone_number", nullable = false)
-    var phoneNumber: String
+    var phoneNumber: String,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

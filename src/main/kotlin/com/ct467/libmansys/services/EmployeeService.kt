@@ -21,10 +21,10 @@ class EmployeeService(
             .map { employee -> employee.toResponse() }
     }
 
-    fun findEmployeeById(employeeId: Long): ResponseEmployee {
+    fun findEmployeeById(id: Long): ResponseEmployee {
         val employee = employeeRepository
-            .findById(employeeId)
-            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Employee", id = employeeId) }
+            .findById(id)
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Employee", id = "$id") }
 
         return employee.toResponse()
     }
@@ -35,21 +35,21 @@ class EmployeeService(
         return createdEmployee.toResponse()
     }
 
-    fun updateEmployee(employeeId: Long, requestEmployee: RequestEmployee): ResponseEmployee {
-        if (!employeeRepository.existsById(employeeId)) {
-            throw EntityWithIdNotFoundException("Employee", employeeId)
+    fun updateEmployee(id: Long, requestEmployee: RequestEmployee): ResponseEmployee {
+        if (!employeeRepository.existsById(id)) {
+            throw EntityWithIdNotFoundException("Employee", "$id")
         }
 
-        val employee = requestEmployee.toEntity(employeeId)
+        val employee = requestEmployee.toEntity(id)
         val updatedEmployee = employeeRepository.save(employee)
         return updatedEmployee.toResponse()
     }
 
-    fun deleteEmployee(employeeId: Long) {
-        if (!employeeRepository.existsById(employeeId)) {
-            throw EntityWithIdNotFoundException("Employee", employeeId)
+    fun deleteEmployee(id: Long) {
+        if (!employeeRepository.existsById(id)) {
+            throw EntityWithIdNotFoundException("Employee", "$id")
         }
 
-        return employeeRepository.deleteById(employeeId)
+        return employeeRepository.deleteById(id)
     }
 }
