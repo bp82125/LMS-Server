@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*
 class LibraryCardController(
     @Autowired private val libraryCardService: LibraryCardService
 ) {
-    @GetMapping("/library-cards")
+    @GetMapping("/library-cards", "/library-cards/")
     fun findAllLibraryCards(): ResponseEntity<ApiResponse<List<ResponseLibraryCard>>> {
         val libraryCards = libraryCardService.findAllLibraryCards()
         return ResponseEntity.ok(
@@ -28,7 +28,7 @@ class LibraryCardController(
         )
     }
 
-    @GetMapping("/{readerId}/library-cards")
+    @GetMapping("/{readerId}/library-cards", "/{readerId}/library-cards/")
     fun findLibraryCardByNumber(
         @PathVariable readerId: Long
     ): ResponseEntity<ApiResponse<ResponseLibraryCard>> {
@@ -43,7 +43,7 @@ class LibraryCardController(
         )
     }
 
-    @PostMapping("/{readerId}/library-cards")
+    @PostMapping("/{readerId}/library-cards", "/{readerId}/library-cards/")
     fun createLibraryCard(
         @PathVariable readerId: Long,
         @Valid @RequestBody requestLibraryCard: RequestLibraryCard
@@ -59,7 +59,7 @@ class LibraryCardController(
         )
     }
 
-    @PutMapping("/{readerId}/library-cards")
+    @PutMapping("/{readerId}/library-cards", "/{readerId}/library-cards/")
     fun updateLibraryCard(
         @PathVariable readerId: Long,
         @Valid @RequestBody requestLibraryCard: RequestLibraryCard
@@ -75,7 +75,7 @@ class LibraryCardController(
         )
     }
 
-    @DeleteMapping("/{readerId}/library-cards")
+    @DeleteMapping("/{readerId}/library-cards", "/{readerId}/library-cards/")
     fun deleteLibraryCard(@PathVariable readerId: Long): ResponseEntity<ApiResponse<Void>> {
         libraryCardService.deleteLibraryCard(readerId)
         return ResponseEntity.ok(

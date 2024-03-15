@@ -30,7 +30,7 @@ class BookController(
         )
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}", "/{id}/")
     fun findBookById(@PathVariable id: Long): ResponseEntity<ApiResponse<ResponseBook>> {
         val book = bookService.findBookById(id)
         return ResponseEntity.ok(
@@ -43,7 +43,7 @@ class BookController(
         )
     }
 
-    @PostMapping("")
+    @PostMapping("", "/")
     fun createBook(@Valid @RequestBody requestBook: RequestBook): ResponseEntity<ApiResponse<ResponseBook>> {
         val createdBook = bookService.createBook(requestBook)
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -56,7 +56,7 @@ class BookController(
         )
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}", "/{id}/")
     fun updateBook(
         @PathVariable id: Long,
         @Valid @RequestBody requestBook: RequestBook
@@ -72,7 +72,7 @@ class BookController(
         )
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}", "/{id}/")
     fun deleteBook(@PathVariable id: Long): ResponseEntity<ApiResponse<Void>> {
         bookService.deleteBook(id)
         return ResponseEntity.ok(

@@ -28,7 +28,7 @@ class CategoryController(
         )
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}", "/{id}/")
     fun findCategoryById(@PathVariable id: Long): ResponseEntity<ApiResponse<ResponseCategory>> {
         val category = categoryService.findCategoryById(id)
         return ResponseEntity.ok(
@@ -41,7 +41,7 @@ class CategoryController(
         )
     }
 
-    @PostMapping("")
+    @PostMapping("", "/")
     fun createCategory(@RequestBody @Valid requestCategory: RequestCategory): ResponseEntity<ApiResponse<ResponseCategory>> {
         val createdCategory = categoryService.createCategory(requestCategory)
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -54,7 +54,7 @@ class CategoryController(
         )
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}", "/{id}/")
     fun updateCategory(
         @PathVariable id: Long,
         @RequestBody @Valid requestCategory: RequestCategory
@@ -70,7 +70,7 @@ class CategoryController(
         )
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}", "/{id}/")
     fun deleteCategory(@PathVariable id: Long): ResponseEntity<ApiResponse<Void>> {
         categoryService.deleteCategory(id)
         return ResponseEntity.ok(

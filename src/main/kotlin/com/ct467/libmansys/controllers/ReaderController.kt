@@ -28,7 +28,7 @@ class ReaderController(
         )
     }
 
-    @GetMapping("/{readerId}")
+    @GetMapping("/{readerId}", "/{readerId}/")
     fun findReaderById(@PathVariable readerId: Long): ResponseEntity<ApiResponse<ResponseReader>> {
         val reader = readerService.findReaderById(readerId)
         return ResponseEntity.ok(
@@ -41,7 +41,7 @@ class ReaderController(
         )
     }
 
-    @PostMapping("")
+    @PostMapping("", "/")
     fun createReader(@Valid @RequestBody requestReader: RequestReader): ResponseEntity<ApiResponse<ResponseReader>> {
         val createdReader = readerService.createReader(requestReader)
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -54,7 +54,7 @@ class ReaderController(
         )
     }
 
-    @PutMapping("/{readerId}")
+    @PutMapping("/{readerId}", "/{readerId}/")
     fun updateReader(
         @PathVariable readerId: Long,
         @Valid @RequestBody requestReader: RequestReader
@@ -70,7 +70,7 @@ class ReaderController(
         )
     }
 
-    @DeleteMapping("/{readerId}")
+    @DeleteMapping("/{readerId}", "/{readerId}/")
     fun deleteReader(@PathVariable readerId: Long): ResponseEntity<ApiResponse<Void>> {
         readerService.deleteReader(readerId)
         return ResponseEntity.ok(

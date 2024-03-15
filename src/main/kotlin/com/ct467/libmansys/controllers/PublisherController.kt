@@ -29,7 +29,7 @@ class PublisherController(
         )
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}", "/{id}/")
     fun findPublisherById(@PathVariable id: Long): ResponseEntity<ApiResponse<ResponsePublisher>> {
         val publisher = publisherService.findPublisherById(id)
         return ResponseEntity.ok(
@@ -42,7 +42,7 @@ class PublisherController(
         )
     }
 
-    @PostMapping("")
+    @PostMapping("", "/")
     fun createPublisher(@Valid @RequestBody requestPublisher: RequestPublisher
     ): ResponseEntity<ApiResponse<ResponsePublisher>> {
         val createdPublisher = publisherService.createPublisher(requestPublisher)
@@ -56,7 +56,7 @@ class PublisherController(
         )
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}", "/{id}/")
     fun updatePublisher(
         @PathVariable id: Long,
         @Valid @RequestBody requestPublisher: RequestPublisher
@@ -72,7 +72,7 @@ class PublisherController(
         )
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}", "/{id}/")
     fun deletePublisher(@PathVariable id: Long): ResponseEntity<ApiResponse<Void>> {
         publisherService.deletePublisher(id)
         return ResponseEntity.ok(

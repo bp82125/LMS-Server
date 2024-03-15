@@ -35,7 +35,7 @@ class CheckoutController(
         )
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}", "/{id}/")
     fun findCheckoutById(
         @PathVariable id: Long
     ): ResponseEntity<ApiResponse<ResponseCheckout>> {
@@ -63,7 +63,7 @@ class CheckoutController(
         )
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}", "/{id}/")
     fun updateCheckout(
         @PathVariable id: Long,
         @Valid @RequestBody requestCheckout: RequestCheckout
@@ -79,7 +79,7 @@ class CheckoutController(
         )
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}", "/{id}/")
     fun deleteCheckout(
         @PathVariable id: Long
     ): ResponseEntity<ApiResponse<Unit>> {
