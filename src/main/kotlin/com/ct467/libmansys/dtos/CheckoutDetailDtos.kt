@@ -5,7 +5,7 @@ import java.time.LocalDate
 
 data class RequestCheckoutDetail(
     val note: String?,
-    val returned: Boolean
+    val returned: Boolean = false
 )
 
 data class ResponseCheckoutDetail(
