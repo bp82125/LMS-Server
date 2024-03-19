@@ -15,7 +15,7 @@ class Checkout(
     var libraryCard: LibraryCard,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "librarian_id")
+    @JoinColumn(name = "employee_id")
     var employee: Employee,
 
     @Column(name = "checkout_date")
