@@ -8,7 +8,7 @@ import java.time.LocalDate
 class LibraryCard(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var cardNumber: Long = 1,
+    var cardNumber: Long? = null,
 
     @Column(name = "start_date", nullable = false)
     var startDate: LocalDate,

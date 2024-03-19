@@ -15,7 +15,7 @@ data class RequestAuthor(
 )
 
 data class ResponseAuthor(
-    val id: Long,
+    val id: Long?,
     val authorName: String,
     val website: String,
     val note: String,

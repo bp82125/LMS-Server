@@ -26,7 +26,7 @@ data class RequestBook(
 )
 
 data class ResponseBook(
-    val id: Long,
+    val id: Long?,
     val bookName: String,
     val publicationYear: Int,
     val author: ResponseAuthor,

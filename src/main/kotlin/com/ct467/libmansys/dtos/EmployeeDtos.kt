@@ -16,7 +16,7 @@ data class RequestEmployee(
 )
 
 data class ResponseEmployee(
-    val employeeId: Long,
+    val employeeId: Long?,
     val fullName: String,
     val birthDate: LocalDate,
     val phoneNumber: String

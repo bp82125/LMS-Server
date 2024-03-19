@@ -33,11 +33,11 @@ class CheckoutService(
 
     fun createCheckout(requestCheckout: RequestCheckout): ResponseCheckout {
         val libraryCard = libraryCardRepository.findById(requestCheckout.cardNumber)
-            .orElseThrow { EntityWithIdNotFoundException(objectName = "Library card", id = "$requestCheckout.cardNumber") }
+            .orElseThrow { EntityWithIdNotFoundException(objectName = "Library card", id = "${requestCheckout.cardNumber}") }
 
         val employee = employeeRepository
             .findById(requestCheckout.employeeId)
-            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Employee", id = "$requestCheckout.employeeId") }
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Employee", id = "${requestCheckout.employeeId}") }
 
         val checkout = requestCheckout.toEntity(libraryCard = libraryCard, employee = employee)
         val createdCheckout = checkoutRepository.save(checkout)
@@ -50,11 +50,11 @@ class CheckoutService(
         }
 
         val libraryCard = libraryCardRepository.findById(requestCheckout.cardNumber)
-            .orElseThrow { EntityWithIdNotFoundException(objectName = "Library card", id = "$requestCheckout.cardNumber") }
+            .orElseThrow { EntityWithIdNotFoundException(objectName = "Library card", id = "${requestCheckout.cardNumber}") }
 
         val employee = employeeRepository
             .findById(requestCheckout.employeeId)
-            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Employee", id = "$requestCheckout.employeeId") }
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Employee", id = "${requestCheckout.employeeId}") }
 
         val checkout = requestCheckout
             .toEntity(libraryCard = libraryCard, employee = employee)

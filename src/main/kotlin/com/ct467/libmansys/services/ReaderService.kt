@@ -59,7 +59,7 @@ class ReaderService(
             .orElseThrow { EntityWithIdNotFoundException(objectName =  "Reader", id = "$id") }
 
         reader?.libraryCard?.let {
-            libraryCardRepository.deleteById(it.cardNumber)
+            it.cardNumber?.let { it1 -> libraryCardRepository.deleteById(it1) }
         }
 
         reader.removeLibraryCard()

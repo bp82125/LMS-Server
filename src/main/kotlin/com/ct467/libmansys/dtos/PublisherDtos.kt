@@ -18,7 +18,7 @@ data class RequestPublisher(
 )
 
 data class ResponsePublisher(
-    val id: Long,
+    val id: Long?,
     val publisherName: String,
     val address: String,
     val email: String,

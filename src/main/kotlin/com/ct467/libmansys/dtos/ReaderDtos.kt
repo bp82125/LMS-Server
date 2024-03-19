@@ -13,7 +13,7 @@ data class RequestReader(
 )
 
 data class ResponseReader(
-    val readerId: Long,
+    val id: Long?,
     val readerName: String,
     val address: String,
     val libraryCard: ResponseLibraryCard?

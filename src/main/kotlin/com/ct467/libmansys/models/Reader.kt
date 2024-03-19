@@ -7,7 +7,7 @@ import jakarta.persistence.*
 class Reader(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 1,
+    var id: Long? = null,
 
     @Column(name = "name", nullable = false)
     var readerName: String,

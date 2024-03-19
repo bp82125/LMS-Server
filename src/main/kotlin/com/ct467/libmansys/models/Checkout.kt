@@ -8,7 +8,7 @@ import java.time.LocalDate
 class Checkout(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 1,
+    var id: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_number")

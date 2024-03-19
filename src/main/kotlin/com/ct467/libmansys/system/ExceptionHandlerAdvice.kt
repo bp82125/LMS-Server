@@ -1,6 +1,7 @@
 package com.ct467.libmansys.system
 
 import com.ct467.libmansys.exceptions.AssociatedEntityNotFoundException
+import com.ct467.libmansys.exceptions.EntityAlreadyAssociatedException
 import com.ct467.libmansys.exceptions.EntityWithIdNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -36,6 +37,18 @@ class ExceptionHandlerAdvice {
             message = ex.message
         )
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse)
+    }
+
+    @ExceptionHandler(EntityAlreadyAssociatedException::class)
+    @ResponseBody
+    fun handleEntityAlreadyAssociatedException(ex: EntityAlreadyAssociatedException): ResponseEntity<ApiResponse<Void>> {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+            ApiResponse(
+                flag = false,
+                statusCode = HttpStatus.CONFLICT.value(),
+                message = ex.message
+            )
+        )
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)

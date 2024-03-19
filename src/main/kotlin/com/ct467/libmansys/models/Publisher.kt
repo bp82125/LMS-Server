@@ -6,7 +6,7 @@ import jakarta.persistence.*
 class Publisher(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 1,
+    var id: Long? = null,
 
     @Column(name = "name", nullable = false)
     var publisherName: String,

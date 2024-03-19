@@ -9,7 +9,7 @@ data class RequestCategory(
 )
 
 data class ResponseCategory(
-    val id: Long,
+    val id: Long?,
     val categoryName: String,
     val numberOfBooks: Int
 )

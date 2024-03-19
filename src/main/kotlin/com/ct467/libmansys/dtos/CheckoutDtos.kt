@@ -14,7 +14,7 @@ data class RequestCheckout(
 )
 
 data class ResponseCheckout(
-    val id: Long,
+    val id: Long?,
     val libraryCard: ResponseLibraryCard,
     val employee: ResponseEmployee,
     val checkoutDate: LocalDate,

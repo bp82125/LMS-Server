@@ -16,7 +16,7 @@ fun RequestReader.toEntity(id: Long = 0, libraryCard: LibraryCard? = null): Read
 
 fun Reader.toResponse(): ResponseReader {
     return ResponseReader(
-        readerId = this.id,
+        id = this.id,
         readerName = this.readerName,
         address = this.address,
         libraryCard = this.libraryCard?.toResponse()

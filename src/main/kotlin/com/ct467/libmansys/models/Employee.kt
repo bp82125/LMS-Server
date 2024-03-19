@@ -8,7 +8,7 @@ import java.time.LocalDate
 class Employee(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 1,
+    var id: Long? = null,
 
     @Column(name = "full_name", nullable = false)
     var fullName: String,

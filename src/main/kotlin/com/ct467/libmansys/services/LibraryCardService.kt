@@ -5,6 +5,7 @@ import com.ct467.libmansys.converters.toResponse
 import com.ct467.libmansys.dtos.RequestLibraryCard
 import com.ct467.libmansys.dtos.ResponseLibraryCard
 import com.ct467.libmansys.exceptions.AssociatedEntityNotFoundException
+import com.ct467.libmansys.exceptions.EntityAlreadyAssociatedException
 import com.ct467.libmansys.exceptions.EntityWithIdNotFoundException
 import com.ct467.libmansys.repositories.LibraryCardRepository
 import com.ct467.libmansys.repositories.ReaderRepository
@@ -25,23 +26,32 @@ class LibraryCardService(
             .map { libraryCard -> libraryCard.toResponse() }
     }
 
-    fun findLibraryCardOfReader(id: Long): ResponseLibraryCard? {
-        val reader = readerRepository.findById(id)
-            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Reader", id = "$id") }
+    fun findLibraryCardOfReader(readerId: Long): ResponseLibraryCard? {
+        val reader = readerRepository.findById(readerId)
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Reader", id = "$readerId") }
 
         val cardNumber = reader.libraryCard?.cardNumber
-            ?: throw AssociatedEntityNotFoundException("Library card", "Reader", id)
+            ?: throw AssociatedEntityNotFoundException("Library card", "Reader", readerId)
 
         val libraryCard = libraryCardRepository.findById(cardNumber)
-            .orElseThrow { EntityWithIdNotFoundException(objectName = "Library card", id = "$id") }
+            .orElseThrow { EntityWithIdNotFoundException(objectName = "Library card", id = "$readerId") }
 
         return libraryCard.toResponse()
     }
 
-    fun createLibraryCard(id: Long, requestLibraryCard: RequestLibraryCard): ResponseLibraryCard {
+    fun createLibraryCard(readerId: Long, requestLibraryCard: RequestLibraryCard): ResponseLibraryCard {
         val reader = readerRepository
-            .findById(id)
-            .orElseThrow { EntityWithIdNotFoundException(objectName = "Reader", id = "$id") }
+            .findById(readerId)
+            .orElseThrow { EntityWithIdNotFoundException(objectName = "Reader", id = "$readerId") }
+
+        if (reader.libraryCard != null){
+            throw EntityAlreadyAssociatedException(
+                entityName = "Reader",
+                entityId = "$readerId",
+                associatedEntityName = "Library card",
+                associatedEntityId = "${reader.libraryCard!!.cardNumber}"
+            )
+        }
 
         val libraryCard = requestLibraryCard.toEntity(
             reader = reader,
@@ -57,12 +67,12 @@ class LibraryCardService(
         return createdLibraryCard.toResponse()
     }
 
-    fun updateLibraryCard(id: Long, requestLibraryCard: RequestLibraryCard): ResponseLibraryCard {
-        val reader = readerRepository.findById(id)
-            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Reader", id = "$id") }
+    fun updateLibraryCard(readerId: Long, requestLibraryCard: RequestLibraryCard): ResponseLibraryCard {
+        val reader = readerRepository.findById(readerId)
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Reader", id = "$readerId") }
 
         val cardNumber = reader.libraryCard?.cardNumber
-            ?: throw AssociatedEntityNotFoundException("Library card", "Reader", id)
+            ?: throw AssociatedEntityNotFoundException("Library card", "Reader", readerId)
 
         val oldLibraryCard = libraryCardRepository
             .findById(cardNumber)
@@ -78,12 +88,12 @@ class LibraryCardService(
         return updatedLibraryCard.toResponse()
     }
 
-    fun deleteLibraryCard(id: Long) {
-        val reader = readerRepository.findById(id)
-            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Reader", id = "$id") }
+    fun deleteLibraryCard(readerId: Long) {
+        val reader = readerRepository.findById(readerId)
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Reader", id = "$readerId") }
 
         val cardNumber = reader.libraryCard?.cardNumber
-            ?: throw AssociatedEntityNotFoundException("Library card", "Reader", id)
+            ?: throw AssociatedEntityNotFoundException("Library card", "Reader", readerId)
 
         val libraryCard = libraryCardRepository.findById(cardNumber)
             .orElseThrow { EntityWithIdNotFoundException(objectName = "Library card", id = "$cardNumber") }

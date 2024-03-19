@@ -9,7 +9,7 @@ data class RequestCheckoutDetail(
 )
 
 data class ResponseCheckoutDetail(
-    val checkoutId: Long,
+    val checkoutId: Long?,
     val book: ResponseBook,
     val note: String,
     val returned: Boolean,
