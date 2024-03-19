@@ -29,7 +29,7 @@ data class ResponseBook(
     val id: Long?,
     val bookName: String,
     val publicationYear: Int,
-    val author: ResponseAuthor,
-    val category: ResponseCategory,
-    val publisher: ResponsePublisher
+    val author: ResponseAuthor?,
+    val category: ResponseCategory?,
+    val publisher: ResponsePublisher?
 )

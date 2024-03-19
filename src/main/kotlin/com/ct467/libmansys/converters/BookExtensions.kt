@@ -23,8 +23,8 @@ fun Book.toResponse(): ResponseBook {
         id = this.id,
         bookName = this.bookName,
         publicationYear = this.publicationYear,
-        author = this.author.toResponse(),
-        category = this.category.toResponse(),
-        publisher = this.publisher.toResponse()
+        author = this.author?.toResponse(),
+        category = this.category?.toResponse(),
+        publisher = this.publisher?.toResponse()
     )
 }

@@ -12,11 +12,11 @@ class Checkout(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_number")
-    var libraryCard: LibraryCard,
+    var libraryCard: LibraryCard?,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
-    var employee: Employee,
+    var employee: Employee?,
 
     @Column(name = "checkout_date")
     var checkoutDate: LocalDate,

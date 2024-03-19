@@ -17,15 +17,15 @@ class Book(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
-    var category: Category,
+    var category: Category?,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
-    var author: Author,
+    var author: Author?,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publisher_id")
-    var publisher: Publisher
+    var publisher: Publisher?
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
