@@ -17,7 +17,6 @@ class CheckoutDetail(
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
-
     var book: Book,
 
     @Column(name = "note")

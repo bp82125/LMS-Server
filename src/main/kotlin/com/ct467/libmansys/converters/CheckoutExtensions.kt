@@ -17,6 +17,7 @@ fun RequestCheckout.toEntity(libraryCard: LibraryCard, employee: Employee): Chec
 
 fun Checkout.toResponse(): ResponseCheckout {
     return ResponseCheckout(
+        id = this.id,
         libraryCard = this.libraryCard.toResponse(),
         employee = this.employee.toResponse(),
         checkoutDate = this.checkoutDate,
