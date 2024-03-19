@@ -15,7 +15,7 @@ fun RequestEmployee.toEntity(employeeId: Long = 0): Employee {
 
 fun Employee.toResponse(): ResponseEmployee {
     return ResponseEmployee(
-        employeeId = this.id,
+        id = this.id,
         fullName = this.fullName,
         birthDate = this.birthDate,
         phoneNumber = this.phoneNumber
