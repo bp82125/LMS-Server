@@ -20,6 +20,15 @@ class Category(
     )
     var books: List<Book> = mutableListOf()
 ) {
+    @PreRemove
+    fun preRemove(){
+        books.forEach { it.category = null }
+    }
+
+    fun numberOfBooks(): Int {
+        return books.size
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Category) return false
@@ -38,9 +47,5 @@ class Category(
 
     override fun toString(): String {
         return "Category(categoryId=$id, categoryName='$categoryName')"
-    }
-
-    fun numberOfBooks(): Int {
-        return books.size
     }
 }

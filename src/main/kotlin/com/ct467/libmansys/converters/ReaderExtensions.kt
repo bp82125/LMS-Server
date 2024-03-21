@@ -19,6 +19,7 @@ fun Reader.toResponse(): ResponseReader {
         id = this.id,
         readerName = this.readerName,
         address = this.address,
-        libraryCard = this.libraryCard?.toResponse()
+        libraryCard = this.libraryCard?.toResponse(),
+        deleted = this.deleted
     )
 }

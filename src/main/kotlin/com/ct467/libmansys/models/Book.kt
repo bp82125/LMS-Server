@@ -25,7 +25,10 @@ class Book(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publisher_id")
-    var publisher: Publisher?
+    var publisher: Publisher?,
+
+    @Column(name = "deleted", nullable = false)
+    var deleted: Boolean = false
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -37,21 +40,24 @@ class Book(
         if (category != other.category) return false
         if (author != other.author) return false
         if (publisher != other.publisher) return false
+        if (deleted != other.deleted) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = id.hashCode()
+        var result = id?.hashCode() ?: 0
         result = 31 * result + bookName.hashCode()
         result = 31 * result + publicationYear
-        result = 31 * result + category.hashCode()
-        result = 31 * result + author.hashCode()
-        result = 31 * result + publisher.hashCode()
+        result = 31 * result + (category?.hashCode() ?: 0)
+        result = 31 * result + (author?.hashCode() ?: 0)
+        result = 31 * result + (publisher?.hashCode() ?: 0)
+        result = 31 * result + deleted.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "Book(bookId=$id, bookName='$bookName', publicationYear=$publicationYear, category=$category, author=$author, publisher=$publisher)"
+        return "Book(id=$id, bookName='$bookName', publicationYear=$publicationYear, category=$category, author=$author, publisher=$publisher, deleted=$deleted)"
     }
+
 }

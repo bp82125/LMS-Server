@@ -16,8 +16,8 @@ class EmployeeController(
     @Autowired private val employeeService: EmployeeService
 ) {
     @GetMapping("", "/")
-    fun findAllEmployees(): ResponseEntity<ApiResponse<List<ResponseEmployee>>> {
-        val employees = employeeService.findAllEmployees()
+    fun findAllEmployees(@RequestParam(required = false, defaultValue = "available") status: String?): ResponseEntity<ApiResponse<List<ResponseEmployee>>> {
+        val employees = employeeService.findAllEmployees(status)
         return ResponseEntity.ok(
             ApiResponse(
                 flag = true,

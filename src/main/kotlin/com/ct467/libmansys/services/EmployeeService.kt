@@ -15,10 +15,13 @@ import org.springframework.stereotype.Service
 class EmployeeService(
     @Autowired private val employeeRepository: EmployeeRepository
 ) {
-    fun findAllEmployees(): List<ResponseEmployee> {
-        return employeeRepository
-            .findAll()
-            .map { employee -> employee.toResponse() }
+    fun findAllEmployees(status: String? = null): List<ResponseEmployee> {
+        return when (status) {
+            "deleted" -> employeeRepository.findAllByDeletedTrue().map { it.toResponse() }
+            "available" -> employeeRepository.findAllByDeletedFalse().map { it.toResponse() }
+            "all" -> employeeRepository.findAll().map { it.toResponse() }
+            else -> employeeRepository.findAll().map { it.toResponse() }
+        }
     }
 
     fun findEmployeeById(id: Long): ResponseEmployee {
@@ -46,10 +49,11 @@ class EmployeeService(
     }
 
     fun deleteEmployee(id: Long) {
-        if (!employeeRepository.existsById(id)) {
-            throw EntityWithIdNotFoundException("Employee", "$id")
-        }
+        val employee = employeeRepository
+            .findById(id)
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Employee", id = "$id") }
 
-        return employeeRepository.deleteById(id)
+        employee.apply { this.deleted = true }
+        employeeRepository.save(employee)
     }
 }

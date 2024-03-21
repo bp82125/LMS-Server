@@ -18,6 +18,8 @@ fun Employee.toResponse(): ResponseEmployee {
         id = this.id,
         fullName = this.fullName,
         birthDate = this.birthDate,
-        phoneNumber = this.phoneNumber
+        phoneNumber = this.phoneNumber,
+        username = this.account?.username,
+        deleted = this.deleted
     )
 }

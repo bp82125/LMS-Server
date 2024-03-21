@@ -19,6 +19,10 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
     generate-ddl: true
 
+logging:
+  level:
+    org.springframework.security: TRACE
+
 api:
   endpoint:
     base-url: /api/v1

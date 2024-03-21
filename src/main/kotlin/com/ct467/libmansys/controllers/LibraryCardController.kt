@@ -16,8 +16,10 @@ class LibraryCardController(
     @Autowired private val libraryCardService: LibraryCardService
 ) {
     @GetMapping("/library-cards", "/library-cards/")
-    fun findAllLibraryCards(): ResponseEntity<ApiResponse<List<ResponseLibraryCard>>> {
-        val libraryCards = libraryCardService.findAllLibraryCards()
+    fun findAllLibraryCards(
+        @RequestParam(required = false, defaultValue = "available") status: String?
+    ): ResponseEntity<ApiResponse<List<ResponseLibraryCard>>> {
+        val libraryCards = libraryCardService.findAllLibraryCards(status)
         return ResponseEntity.ok(
             ApiResponse(
                 flag = true,

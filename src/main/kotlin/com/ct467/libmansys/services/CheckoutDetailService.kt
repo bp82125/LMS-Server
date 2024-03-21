@@ -41,6 +41,7 @@ class CheckoutDetailService(
         val book = bookRepository
             .findById(bookId)
             .orElseThrow { EntityWithIdNotFoundException(objectName = "Book", id = "$bookId") }
+            .also { if (it.deleted) throw EntityWithIdNotFoundException(objectName = "Book", id = "$bookId") }
 
         val checkoutDetail = requestCheckoutDetail.toEntity(checkout, book)
         val createdCheckoutDetail = checkoutDetailRepository.save(checkoutDetail)

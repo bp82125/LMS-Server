@@ -33,7 +33,10 @@ class LibraryCard(
         cascade = [CascadeType.PERSIST, CascadeType.MERGE],
         targetEntity = Checkout::class
     )
-    var checkouts: List<Checkout> = mutableListOf()
+    var checkouts: List<Checkout> = mutableListOf(),
+
+    @Column(name = "deleted", nullable = false)
+    var deleted: Boolean = false,
 ) {
 
     override fun equals(other: Any?): Boolean {
