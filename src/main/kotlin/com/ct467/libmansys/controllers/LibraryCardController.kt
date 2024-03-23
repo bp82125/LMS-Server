@@ -31,7 +31,7 @@ class LibraryCardController(
     }
 
     @GetMapping("/{readerId}/library-cards", "/{readerId}/library-cards/")
-    fun findLibraryCardByNumber(
+    fun findLibraryCardByReaderId(
         @PathVariable readerId: Long
     ): ResponseEntity<ApiResponse<ResponseLibraryCard>> {
         val libraryCard = libraryCardService.findLibraryCardOfReader(readerId)

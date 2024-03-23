@@ -51,7 +51,7 @@ class CheckoutDetailController (
         )
     }
 
-    @PostMapping("/{checkoutId}/details/bookId", "/{checkoutId}/details/bookId/")
+    @PostMapping("/{checkoutId}/details/{bookId}", "/{checkoutId}/details/{bookId}/")
     fun createCheckoutDetail(
         @PathVariable checkoutId: Long,
         @PathVariable bookId: Long,
@@ -68,7 +68,7 @@ class CheckoutDetailController (
         )
     }
 
-    @PutMapping("/{checkoutId}/details/bookId", "/{checkoutId}/details/bookId/")
+    @PutMapping("/{checkoutId}/details/{bookId}", "/{checkoutId}/details/{bookId}/")
     fun updateCheckoutDetail(
         @PathVariable checkoutId: Long,
         @PathVariable bookId: Long,
@@ -85,7 +85,7 @@ class CheckoutDetailController (
         )
     }
 
-    @DeleteMapping("/{checkoutId}/details/bookId", "/{checkoutId}/details/bookId/")
+    @DeleteMapping("/{checkoutId}/details/{bookId}", "/{checkoutId}/details/{bookId}/")
     fun deleteCheckoutDetail(
         @PathVariable checkoutId: Long,
         @PathVariable bookId: Long,

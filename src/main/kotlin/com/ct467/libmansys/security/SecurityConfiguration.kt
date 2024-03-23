@@ -10,10 +10,10 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
-import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.config.web.server.ServerHttpSecurity.http
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.oauth2.jwt.JwtDecoder
@@ -33,6 +33,7 @@ class SecurityConfiguration(
     @Autowired private val customBasicAuthenticationEntryPoint: CustomBasicAuthenticationEntryPoint,
     @Autowired private val customBearerTokenAuthenticationEntryPoint: CustomBearerTokenAuthenticationEntryPoint,
     @Autowired private val customBearerTokenAccessDeniedHandler: CustomBearerTokenAccessDeniedHandler,
+    @Autowired private val customNoAuthenticationEntryPoint: CustomNoAuthenticationEntryPoint
 ) {
     private lateinit var publicKey: RSAPublicKey
     private lateinit var privateKey: RSAPrivateKey
@@ -51,7 +52,8 @@ class SecurityConfiguration(
 
     @Bean
     fun securityFilterChain(http: HttpSecurity) : SecurityFilterChain {
-        return http
+        http
+            .csrf { it.disable() }
             .authorizeHttpRequests {
                 it
                     .requestMatchers(HttpMethod.GET, "${this.baseUrl}/books/**").permitAll()
@@ -64,15 +66,19 @@ class SecurityConfiguration(
                     .requestMatchers(HttpMethod.DELETE, "${this.baseUrl}/employees/**").hasAuthority("ADMIN")
                     .anyRequest().authenticated()
             }
-            .csrf { it.disable() }
-            .httpBasic{ it.authenticationEntryPoint(customBasicAuthenticationEntryPoint) }
+            .httpBasic{ it
+                .authenticationEntryPoint(customBasicAuthenticationEntryPoint)
+            }
             .oauth2ResourceServer {
                 it.jwt{}
                     .authenticationEntryPoint(customBearerTokenAuthenticationEntryPoint)
                     .accessDeniedHandler(customBearerTokenAccessDeniedHandler)
             }
+            .exceptionHandling { it.authenticationEntryPoint(customNoAuthenticationEntryPoint) }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-            .build()
+
+        return http.build()
+
     }
 
     @Bean

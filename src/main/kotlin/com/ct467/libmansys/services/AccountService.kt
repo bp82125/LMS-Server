@@ -59,7 +59,6 @@ class AccountService(
         val account = createAccount
             .toEntity(employee = employee)
             .apply {
-
                 this.password = passwordEncoder.encode(this.password)
             }
 
