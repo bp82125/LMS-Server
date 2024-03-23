@@ -61,7 +61,7 @@ class CheckoutDetailController (
         return ResponseEntity.status(HttpStatus.CREATED).body(
             ApiResponse(
                 flag = true,
-                statusCode = HttpStatus.OK.value(),
+                statusCode = HttpStatus.CREATED.value(),
                 data = createdDetail,
                 message = "Created detail of checkoutId: $checkoutId and bookId: $bookId"
             )
@@ -75,7 +75,7 @@ class CheckoutDetailController (
         @RequestBody requestCheckoutDetail: RequestCheckoutDetail
     ): ResponseEntity<ApiResponse<ResponseCheckoutDetail>> {
         val updatedDetail = checkoutDetailService.updateCheckoutDetail(checkoutId, bookId, requestCheckoutDetail)
-        return ResponseEntity.status(HttpStatus.CREATED).body(
+        return ResponseEntity.ok(
             ApiResponse(
                 flag = true,
                 statusCode = HttpStatus.OK.value(),
