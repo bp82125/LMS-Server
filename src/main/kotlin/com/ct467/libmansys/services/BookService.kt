@@ -21,8 +21,13 @@ class BookService(
     @Autowired private val publisherRepository: PublisherRepository,
     @Autowired private val categoryRepository: CategoryRepository
 ) {
-    fun findAllBooks(): List<ResponseBook> {
-        return bookRepository.findAll().map { it.toResponse() }
+    fun findAllBooks(status: String? = null): List<ResponseBook> {
+        return when (status) {
+            "available" -> bookRepository.findAllByDeletedFalse().map { it.toResponse() }
+            "deleted" -> bookRepository.findAllByDeletedTrue().map { it.toResponse() }
+            "all" -> bookRepository.findAll().map { it.toResponse() }
+            else -> bookRepository.findAll().map { it.toResponse() }
+        }
     }
 
     fun findBookById(id: Long): ResponseBook{
@@ -80,10 +85,11 @@ class BookService(
     }
 
     fun deleteBook(id: Long){
-        if(!bookRepository.existsById(id)){
-            throw EntityWithIdNotFoundException(objectName =  "Book", id = "$id")
-        }
+        val book = bookRepository
+            .findById(id)
+            .orElseThrow { EntityWithIdNotFoundException(objectName = "Book", id = "$id") }
 
-        bookRepository.deleteById(id)
+        book.apply { this.deleted = true }
+        bookRepository.save(book)
     }
 }

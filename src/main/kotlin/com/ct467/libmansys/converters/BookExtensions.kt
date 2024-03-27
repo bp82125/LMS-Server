@@ -25,6 +25,7 @@ fun Book.toResponse(): ResponseBook {
         publicationYear = this.publicationYear,
         author = this.author?.toResponse(),
         category = this.category?.toResponse(),
-        publisher = this.publisher?.toResponse()
+        publisher = this.publisher?.toResponse(),
+        deleted = this.deleted
     )
 }

@@ -16,5 +16,6 @@ data class ResponseReader(
     val id: Long?,
     val readerName: String,
     val address: String,
-    val libraryCard: ResponseLibraryCard?
+    val libraryCard: ResponseLibraryCard?,
+    val deleted: Boolean
 )

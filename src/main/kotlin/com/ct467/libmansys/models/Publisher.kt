@@ -28,6 +28,15 @@ class Publisher(
     )
     val books: List<Book> = mutableListOf()
 ) {
+    @PreRemove
+    fun preRemove(){
+        books.forEach { it.publisher = null }
+    }
+
+    fun numberOfBooks(): Int {
+        return books.size
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Publisher) return false
@@ -52,9 +61,5 @@ class Publisher(
 
     override fun toString(): String {
         return "Publisher(publisherId=$id, publisherName='$publisherName', address='$address', email='$email', representativeInfo='$representativeInfo')"
-    }
-
-    fun numberOfBooks(): Int {
-        return books.size
     }
 }

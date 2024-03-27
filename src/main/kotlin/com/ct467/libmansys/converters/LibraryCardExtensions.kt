@@ -22,6 +22,7 @@ fun LibraryCard.toResponse(): ResponseLibraryCard {
         startDate = this.startDate,
         expirationDate = this.expirationDate,
         note = this.note,
-        readerId = this.reader?.id
+        readerId = this.reader?.id,
+        deleted = this.deleted
     )
 }

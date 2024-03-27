@@ -51,7 +51,7 @@ class CheckoutDetailController (
         )
     }
 
-    @PostMapping("/{checkoutId}/details/bookId", "/{checkoutId}/details/bookId/")
+    @PostMapping("/{checkoutId}/details/{bookId}", "/{checkoutId}/details/{bookId}/")
     fun createCheckoutDetail(
         @PathVariable checkoutId: Long,
         @PathVariable bookId: Long,
@@ -61,21 +61,21 @@ class CheckoutDetailController (
         return ResponseEntity.status(HttpStatus.CREATED).body(
             ApiResponse(
                 flag = true,
-                statusCode = HttpStatus.OK.value(),
+                statusCode = HttpStatus.CREATED.value(),
                 data = createdDetail,
                 message = "Created detail of checkoutId: $checkoutId and bookId: $bookId"
             )
         )
     }
 
-    @PutMapping("/{checkoutId}/details/bookId", "/{checkoutId}/details/bookId/")
+    @PutMapping("/{checkoutId}/details/{bookId}", "/{checkoutId}/details/{bookId}/")
     fun updateCheckoutDetail(
         @PathVariable checkoutId: Long,
         @PathVariable bookId: Long,
         @RequestBody requestCheckoutDetail: RequestCheckoutDetail
     ): ResponseEntity<ApiResponse<ResponseCheckoutDetail>> {
         val updatedDetail = checkoutDetailService.updateCheckoutDetail(checkoutId, bookId, requestCheckoutDetail)
-        return ResponseEntity.status(HttpStatus.CREATED).body(
+        return ResponseEntity.ok(
             ApiResponse(
                 flag = true,
                 statusCode = HttpStatus.OK.value(),
@@ -85,7 +85,7 @@ class CheckoutDetailController (
         )
     }
 
-    @DeleteMapping("/{checkoutId}/details/bookId", "/{checkoutId}/details/bookId/")
+    @DeleteMapping("/{checkoutId}/details/{bookId}", "/{checkoutId}/details/{bookId}/")
     fun deleteCheckoutDetail(
         @PathVariable checkoutId: Long,
         @PathVariable bookId: Long,

@@ -17,5 +17,6 @@ data class ResponseLibraryCard(
     val startDate: LocalDate,
     val expirationDate: LocalDate,
     val note: String,
-    val readerId: Long?
+    val readerId: Long?,
+    val deleted: Boolean
 )

@@ -26,6 +26,17 @@ class Author(
     )
     val books: List<Book> = mutableListOf()
 ) {
+    @PreRemove
+    fun preRemove() {
+        books.forEach { it.author = null }
+    }
+
+    fun numberOfBooks(): Int {
+        return books.size
+    }
+
+
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Author) return false
@@ -48,9 +59,5 @@ class Author(
 
     override fun toString(): String {
         return "Author(authorId=$id, authorName='$authorName', website='$website', note='$note')"
-    }
-
-    fun numberOfBooks(): Int {
-        return books.size
     }
 }

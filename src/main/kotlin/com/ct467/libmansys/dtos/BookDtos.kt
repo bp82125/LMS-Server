@@ -31,5 +31,6 @@ data class ResponseBook(
     val publicationYear: Int,
     val author: ResponseAuthor?,
     val category: ResponseCategory?,
-    val publisher: ResponsePublisher?
+    val publisher: ResponsePublisher?,
+    val deleted: Boolean
 )

@@ -16,8 +16,10 @@ class ReaderController(
     @Autowired private val readerService: ReaderService
 ) {
     @GetMapping("", "/")
-    fun findAllReaders(): ResponseEntity<ApiResponse<List<ResponseReader>>> {
-        val readers = readerService.findAllReaders()
+    fun findAllReaders(
+        @RequestParam(required = false, defaultValue = "available") status: String?
+    ): ResponseEntity<ApiResponse<List<ResponseReader>>> {
+        val readers = readerService.findAllReaders(status)
         return ResponseEntity.ok(
             ApiResponse(
                 flag = true,

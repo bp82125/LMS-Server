@@ -18,8 +18,10 @@ class BookController(
     @Autowired private val bookService: BookService
 ) {
     @GetMapping("", "/")
-    fun findAllBooks(): ResponseEntity<ApiResponse<List<ResponseBook>>> {
-        val books = bookService.findAllBooks()
+    fun findAllBooks(
+        @RequestParam(required = false, defaultValue = "available") status: String?
+    ): ResponseEntity<ApiResponse<List<ResponseBook>>> {
+        val books = bookService.findAllBooks(status)
         return ResponseEntity.ok(
             ApiResponse(
                 flag = true,

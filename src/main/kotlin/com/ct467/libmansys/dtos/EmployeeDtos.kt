@@ -19,5 +19,7 @@ data class ResponseEmployee(
     val id: Long?,
     val fullName: String,
     val birthDate: LocalDate,
-    val phoneNumber: String
+    val phoneNumber: String,
+    val username: String?,
+    val deleted: Boolean
 )

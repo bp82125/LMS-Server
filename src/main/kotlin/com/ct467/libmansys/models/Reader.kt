@@ -17,8 +17,17 @@ class Reader(
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "card_number", referencedColumnName = "cardNumber")
-    var libraryCard: LibraryCard? = null
+    var libraryCard: LibraryCard? = null,
+
+    @Column(name = "deleted", nullable = false)
+    var deleted: Boolean = false
 ) {
+
+    fun removeLibraryCard() {
+        this.libraryCard?.reader = null
+        this.libraryCard = null
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Reader) return false
@@ -27,24 +36,21 @@ class Reader(
         if (readerName != other.readerName) return false
         if (address != other.address) return false
         if (libraryCard != other.libraryCard) return false
+        if (deleted != other.deleted) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = id.hashCode()
+        var result = id?.hashCode() ?: 0
         result = 31 * result + readerName.hashCode()
         result = 31 * result + address.hashCode()
-        result = 31 * result + libraryCard.hashCode()
+        result = 31 * result + (libraryCard?.hashCode() ?: 0)
+        result = 31 * result + deleted.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "Reader(readerId=${id}d, readerName='$readerName', address='$address', cardNumber='$libraryCard')"
-    }
-
-    fun removeLibraryCard() {
-        this.libraryCard?.reader = null
-        this.libraryCard = null
+        return "Reader(id=$id, readerName='$readerName', address='$address', libraryCard=$libraryCard, deleted=$deleted)"
     }
 }

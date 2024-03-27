@@ -17,12 +17,14 @@ class ReaderService(
     @Autowired private val readerRepository: ReaderRepository,
     @Autowired private val libraryCardRepository: LibraryCardRepository
 ) {
-    fun findAllReaders(): List<ResponseReader> {
-        return readerRepository
-            .findAll()
-            .map { reader -> reader.toResponse() }
+    fun findAllReaders(status: String? = null): List<ResponseReader> {
+        return when (status) {
+            "deleted" -> readerRepository.findAllByDeletedTrue().map { it.toResponse() }
+            "available" -> readerRepository.findAllByDeletedFalse().map { it.toResponse() }
+            "all" -> readerRepository.findAll().map { it.toResponse() }
+            else -> readerRepository.findAll().map { it.toResponse() }
+        }
     }
-
     fun findReaderById(id: Long): ResponseReader {
         val reader = readerRepository
             .findById(id)
@@ -58,11 +60,14 @@ class ReaderService(
             .findById(id)
             .orElseThrow { EntityWithIdNotFoundException(objectName =  "Reader", id = "$id") }
 
-        reader?.libraryCard?.let {
-            it.cardNumber?.let { it1 -> libraryCardRepository.deleteById(it1) }
-        }
-
-        reader.removeLibraryCard()
-        return readerRepository.deleteById(id)
+//        reader?.libraryCard?.let {
+//            it.cardNumber?.let { it1 -> libraryCardRepository.deleteById(it1) }
+//        }
+//
+//        reader.removeLibraryCard()
+//        return readerRepository.deleteById(id)
+        reader.libraryCard?.apply { this.deleted = true }
+        reader.apply { this.deleted = true }
+        readerRepository.save(reader)
     }
 }
