@@ -22,7 +22,6 @@ class LibraryCard(
     @OneToOne(
         mappedBy = "libraryCard",
         fetch = FetchType.LAZY,
-        cascade = [CascadeType.PERSIST, CascadeType.MERGE],
         targetEntity = Reader::class
     )
     var reader: Reader? = null,
@@ -30,7 +29,7 @@ class LibraryCard(
     @OneToMany(
         mappedBy = "libraryCard",
         fetch = FetchType.LAZY,
-        cascade = [CascadeType.PERSIST, CascadeType.MERGE],
+        cascade = [CascadeType.ALL],
         targetEntity = Checkout::class
     )
     var checkouts: List<Checkout> = mutableListOf(),
@@ -38,7 +37,6 @@ class LibraryCard(
     @Column(name = "deleted", nullable = false)
     var deleted: Boolean = false,
 ) {
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is LibraryCard) return false
@@ -47,23 +45,24 @@ class LibraryCard(
         if (startDate != other.startDate) return false
         if (expirationDate != other.expirationDate) return false
         if (note != other.note) return false
-        if (reader != other.reader) return false
         if (checkouts != other.checkouts) return false
+        if (deleted != other.deleted) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = cardNumber.hashCode()
+        var result = cardNumber?.hashCode() ?: 0
         result = 31 * result + startDate.hashCode()
         result = 31 * result + expirationDate.hashCode()
         result = 31 * result + note.hashCode()
-        result = 31 * result + (reader?.hashCode() ?: 0)
         result = 31 * result + checkouts.hashCode()
+        result = 31 * result + deleted.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "LibraryCard(cardNumber=$cardNumber, startDate=$startDate, expirationDate=$expirationDate, note='$note', reader=$reader, checkouts=$checkouts)"
+        return "LibraryCard(cardNumber=$cardNumber, startDate=$startDate, expirationDate=$expirationDate, note='$note', checkouts=$checkouts, deleted=$deleted)"
     }
+
 }

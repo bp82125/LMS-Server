@@ -76,15 +76,11 @@ class LibraryCardService(
             .orElseThrow { EntityWithIdNotFoundException(objectName =  "Reader", id = "$readerId") }
             .also { if (it.deleted) throw EntityWithIdNotFoundException(objectName = "Reader", id = "$readerId") }
 
-        val cardNumber = reader.libraryCard?.cardNumber
+        val oldLibraryCard = reader.libraryCard
             ?: throw AssociatedEntityNotFoundException("Library card", "Reader", readerId.toString())
 
-        val oldLibraryCard = libraryCardRepository
-            .findById(cardNumber)
-            .orElseThrow { EntityWithIdNotFoundException(objectName = "Library card", id = "$cardNumber") }
-
         val newLibraryCard = requestLibraryCard.toEntity(
-            cardNumber = cardNumber,
+            cardNumber = oldLibraryCard.cardNumber,
             reader = oldLibraryCard.reader,
             startDate = oldLibraryCard.startDate
         )
