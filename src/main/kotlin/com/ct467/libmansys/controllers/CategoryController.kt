@@ -16,8 +16,10 @@ class CategoryController(
     @Autowired private val categoryService: CategoryService
 ) {
     @GetMapping("", "/")
-    fun findAllCategories(): ResponseEntity<ApiResponse<List<ResponseCategory>>> {
-        val category = categoryService.findAllCategories()
+    fun findAllCategories(
+        @RequestParam(required = false, defaultValue = "available") status: String?,
+    ): ResponseEntity<ApiResponse<List<ResponseCategory>>> {
+        val category = categoryService.findAllCategories(status)
         return ResponseEntity.ok(
             ApiResponse(
                 flag = true,

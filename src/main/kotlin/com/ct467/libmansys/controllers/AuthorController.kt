@@ -16,8 +16,10 @@ class AuthorController(
     @Autowired private val authorService: AuthorService
 ) {
     @GetMapping("", "/")
-    fun findAllAuthors(): ResponseEntity<ApiResponse<List<ResponseAuthor>>> {
-        val authors = authorService.findAllAuthors()
+    fun findAllAuthors(
+        @RequestParam(required = false, defaultValue = "available") status: String?,
+    ): ResponseEntity<ApiResponse<List<ResponseAuthor>>> {
+        val authors = authorService.findAllAuthors(status)
         return ResponseEntity.ok(
             ApiResponse(
                 flag = true,

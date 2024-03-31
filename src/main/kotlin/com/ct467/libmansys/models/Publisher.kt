@@ -20,6 +20,9 @@ class Publisher(
     @Column(name = "representative_info", nullable = false)
     var representativeInfo: String = "",
 
+    @Column(name = "deleted", nullable = false)
+    var deleted: Boolean = false,
+
     @OneToMany(
         mappedBy = "publisher",
         fetch = FetchType.LAZY,
@@ -46,20 +49,22 @@ class Publisher(
         if (address != other.address) return false
         if (email != other.email) return false
         if (representativeInfo != other.representativeInfo) return false
+        if (deleted != other.deleted) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = id.hashCode()
+        var result = id?.hashCode() ?: 0
         result = 31 * result + publisherName.hashCode()
         result = 31 * result + address.hashCode()
         result = 31 * result + email.hashCode()
         result = 31 * result + representativeInfo.hashCode()
+        result = 31 * result + deleted.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "Publisher(publisherId=$id, publisherName='$publisherName', address='$address', email='$email', representativeInfo='$representativeInfo')"
+        return "Publisher(id=$id, publisherName='$publisherName', address='$address', email='$email', representativeInfo='$representativeInfo', deleted=$deleted)"
     }
 }

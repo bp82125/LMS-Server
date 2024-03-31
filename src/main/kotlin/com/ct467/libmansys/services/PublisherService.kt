@@ -15,16 +15,20 @@ import org.springframework.stereotype.Service
 class PublisherService(
     @Autowired private val publisherRepository: PublisherRepository
 ) {
-    fun findAllPublishers(): List<ResponsePublisher> {
-        return publisherRepository
-            .findAll()
-            .map { publisher -> publisher.toResponse() }
+    fun findAllPublishers(status: String? = null): List<ResponsePublisher> {
+        return when (status) {
+            "available" -> publisherRepository.findAllByDeletedFalse().map { it.toResponse() }
+            "deleted" -> publisherRepository.findAllByDeletedTrue().map { it.toResponse() }
+            "all" -> publisherRepository.findAll().map { it.toResponse() }
+            else -> publisherRepository.findAll().map { it.toResponse() }
+        }
     }
 
     fun findPublisherById(id: Long): ResponsePublisher {
         val publisher = publisherRepository
             .findById(id)
             .orElseThrow { EntityWithIdNotFoundException(objectName =  "Publisher", id = "$id") }
+            .also { if (it.deleted) throw EntityWithIdNotFoundException(objectName =  "Publisher", id = "$id") }
 
         return publisher.toResponse()
     }
@@ -36,9 +40,10 @@ class PublisherService(
     }
 
     fun updatePublisher(id: Long, requestPublisher: RequestPublisher): ResponsePublisher {
-        if (!publisherRepository.existsById(id)) {
-            throw EntityWithIdNotFoundException("Publisher", "$id")
-        }
+        val oldPublisher = publisherRepository
+            .findById(id)
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Publisher", id = "$id") }
+            .also { if (it.deleted) throw EntityWithIdNotFoundException(objectName =  "Publisher", id = "$id") }
 
         val publisher = requestPublisher.toEntity(id)
         val updatedPublisher = publisherRepository.save(publisher)
@@ -46,10 +51,13 @@ class PublisherService(
     }
 
     fun deletePublisher(id: Long){
-        if (!publisherRepository.existsById(id)) {
-            throw EntityWithIdNotFoundException("Publisher", "$id")
-        }
+        val publisher = publisherRepository
+            .findById(id)
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Publisher", id = "$id") }
+            .also { if (it.deleted) throw EntityWithIdNotFoundException(objectName =  "Publisher", id = "$id") }
 
-        return publisherRepository.deleteById(id)
+        publisherRepository.save(
+            publisher.apply { this.deleted = true }
+        )
     }
 }
