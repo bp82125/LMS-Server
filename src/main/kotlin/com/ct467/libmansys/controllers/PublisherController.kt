@@ -17,8 +17,10 @@ class PublisherController(
     @Autowired private val publisherService: PublisherService
 ) {
     @GetMapping("", "/")
-    fun findAllPublishers(): ResponseEntity<ApiResponse<List<ResponsePublisher>>> {
-        val publishers = publisherService.findAllPublishers()
+    fun findAllPublishers(
+        @RequestParam(required = false, defaultValue = "available") status: String?,
+    ): ResponseEntity<ApiResponse<List<ResponsePublisher>>> {
+        val publishers = publisherService.findAllPublishers(status)
         return ResponseEntity.ok(
             ApiResponse(
                 flag = true,

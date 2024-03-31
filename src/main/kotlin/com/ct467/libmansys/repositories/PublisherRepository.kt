@@ -5,4 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface PublisherRepository : JpaRepository<Publisher, Long>
+interface PublisherRepository : JpaRepository<Publisher, Long> {
+    fun findAllByDeletedFalse(): List<Publisher>
+    fun findAllByDeletedTrue(): List<Publisher>
+}

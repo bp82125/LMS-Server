@@ -15,16 +15,20 @@ import org.springframework.stereotype.Service
 class AuthorService(
     @Autowired private val authorRepository: AuthorRepository
 ) {
-    fun findAllAuthors(): List<ResponseAuthor> {
-        return authorRepository
-            .findAll()
-            .map { author -> author.toResponse() }
+    fun findAllAuthors(status: String? = null): List<ResponseAuthor> {
+        return when (status) {
+            "available" -> authorRepository.findAllByDeletedFalse().map { it.toResponse() }
+            "deleted" -> authorRepository.findAllByDeletedTrue().map { it.toResponse() }
+            "all" -> authorRepository.findAll().map { it.toResponse() }
+            else -> authorRepository.findAllByDeletedFalse().map { it.toResponse() }
+        }
     }
 
     fun findAuthorById(id: Long): ResponseAuthor {
         val author = authorRepository
             .findById(id)
             .orElseThrow { EntityWithIdNotFoundException(objectName =  "Author", id = "$id") }
+            .also { if(it.deleted) throw EntityWithIdNotFoundException(objectName =  "Author", id = "$id") }
 
         return author.toResponse()
     }
@@ -36,9 +40,10 @@ class AuthorService(
     }
 
     fun updateAuthor(id: Long, requestAuthor: RequestAuthor): ResponseAuthor {
-        if (!authorRepository.existsById(id)) {
-            throw EntityWithIdNotFoundException("Author", "$id")
-        }
+        authorRepository
+            .findById(id)
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Author", id = "$id") }
+            .also { if(it.deleted) throw EntityWithIdNotFoundException(objectName =  "Author", id = "$id") }
 
         val author = requestAuthor.toEntity(id)
         val updatedAuthor = authorRepository.save(author)
@@ -46,10 +51,13 @@ class AuthorService(
     }
 
     fun deleteAuthor(id: Long){
-        if (!authorRepository.existsById(id)) {
-            throw EntityWithIdNotFoundException("Author", "$id")
-        }
+        val author = authorRepository
+            .findById(id)
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Author", id = "$id") }
+            .also { if(it.deleted) throw EntityWithIdNotFoundException(objectName =  "Author", id = "$id") }
 
-        return authorRepository.deleteById(id)
+        authorRepository.save(
+            author.apply { this.deleted = true }
+        )
     }
 }

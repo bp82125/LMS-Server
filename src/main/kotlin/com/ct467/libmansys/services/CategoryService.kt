@@ -15,16 +15,20 @@ import org.springframework.stereotype.Service
 class CategoryService(
     @Autowired private val categoryRepository: CategoryRepository
 ) {
-    fun findAllCategories(): List<ResponseCategory> {
-        return categoryRepository
-            .findAll()
-            .map { category -> category.toResponse() }
+    fun findAllCategories(status: String? = null): List<ResponseCategory> {
+        return when (status) {
+            "available" -> categoryRepository.findAllByDeletedFalse().map { it.toResponse() }
+            "deleted" -> categoryRepository.findAllByDeletedTrue().map { it.toResponse() }
+            "all" -> categoryRepository.findAll().map { it.toResponse() }
+            else -> categoryRepository.findAll().map { it.toResponse() }
+        }
     }
 
     fun findCategoryById(id: Long): ResponseCategory {
         val category = categoryRepository
             .findById(id)
             .orElseThrow { EntityWithIdNotFoundException(objectName =  "Category", id = "$id") }
+            .also { if(it.deleted) throw EntityWithIdNotFoundException(objectName =  "Category", id = "$id") }
 
         return category.toResponse()
     }
@@ -36,9 +40,10 @@ class CategoryService(
     }
 
     fun updateCategory(id: Long, requestCategory: RequestCategory): ResponseCategory {
-        if (!categoryRepository.existsById(id)) {
-            throw EntityWithIdNotFoundException("Category", "$id")
-        }
+        categoryRepository
+            .findById(id)
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Category", id = "$id") }
+            .also { if(it.deleted) throw EntityWithIdNotFoundException(objectName =  "Category", id = "$id") }
 
         val category = requestCategory.toEntity(id)
         val updatedCategory = categoryRepository.save(category)
@@ -46,10 +51,13 @@ class CategoryService(
     }
 
     fun deleteCategory(id: Long){
-        if (!categoryRepository.existsById(id)) {
-            throw EntityWithIdNotFoundException("Category", "$id")
-        }
+        val category = categoryRepository
+            .findById(id)
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Category", id = "$id") }
+            .also { if(it.deleted) throw EntityWithIdNotFoundException(objectName =  "Category", id = "$id") }
 
-        return categoryRepository.deleteById(id)
+        categoryRepository.save(
+            category.apply { this.deleted = true }
+        )
     }
 }

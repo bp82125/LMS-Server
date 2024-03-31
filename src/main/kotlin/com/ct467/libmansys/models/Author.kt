@@ -18,6 +18,9 @@ class Author(
     @Column(name = "note", nullable = false)
     var note: String = "",
 
+    @Column(name = "deleted", nullable = false)
+    var deleted: Boolean = false,
+
     @OneToMany(
         mappedBy = "author",
         fetch = FetchType.LAZY,
@@ -35,8 +38,6 @@ class Author(
         return books.size
     }
 
-
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Author) return false
@@ -45,19 +46,22 @@ class Author(
         if (authorName != other.authorName) return false
         if (website != other.website) return false
         if (note != other.note) return false
+        if (deleted != other.deleted) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = id.hashCode()
+        var result = id?.hashCode() ?: 0
         result = 31 * result + authorName.hashCode()
         result = 31 * result + website.hashCode()
         result = 31 * result + note.hashCode()
+        result = 31 * result + deleted.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "Author(authorId=$id, authorName='$authorName', website='$website', note='$note')"
+        return "Author(id=$id, authorName='$authorName', website='$website', note='$note', deleted=$deleted)"
     }
+
 }

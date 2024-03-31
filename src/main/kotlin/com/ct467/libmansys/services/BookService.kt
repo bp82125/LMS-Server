@@ -11,6 +11,7 @@ import com.ct467.libmansys.repositories.CategoryRepository
 import com.ct467.libmansys.repositories.PublisherRepository
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
 
 @Service
@@ -26,9 +27,10 @@ class BookService(
             "available" -> bookRepository.findAllByDeletedFalse().map { it.toResponse() }
             "deleted" -> bookRepository.findAllByDeletedTrue().map { it.toResponse() }
             "all" -> bookRepository.findAll().map { it.toResponse() }
-            else -> bookRepository.findAll().map { it.toResponse() }
+            else -> bookRepository.findAllByDeletedFalse().map { it.toResponse() }
         }
     }
+
 
     fun findBookById(id: Long): ResponseBook{
         return bookRepository

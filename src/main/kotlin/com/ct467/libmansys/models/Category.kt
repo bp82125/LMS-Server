@@ -12,6 +12,9 @@ class Category(
     @Column(name = "name", nullable = false)
     var categoryName: String,
 
+    @Column(name = "deleted", nullable = false)
+    var deleted: Boolean = false,
+
     @OneToMany(
         mappedBy = "category",
         fetch = FetchType.LAZY,
@@ -35,17 +38,19 @@ class Category(
 
         if (id != other.id) return false
         if (categoryName != other.categoryName) return false
+        if (deleted != other.deleted) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = id.hashCode()
+        var result = id?.hashCode() ?: 0
         result = 31 * result + categoryName.hashCode()
+        result = 31 * result + deleted.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "Category(categoryId=$id, categoryName='$categoryName')"
+        return "Category(id=$id, categoryName='$categoryName', deleted=$deleted)"
     }
 }
