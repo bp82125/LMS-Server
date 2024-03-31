@@ -51,7 +51,14 @@ data class ResponseAccount(
     val username: String,
     val role: AccountRole,
     val enabled: Boolean,
-    val employee: ResponseEmployee?
+    val employee: ResponseEmployeeForAccount?
+)
+
+data class ResponseAccountForEmployee(
+    val id: Long?,
+    val username: String,
+    val role: AccountRole,
+    val enabled: Boolean,
 )
 
 class AccountPrincipal(

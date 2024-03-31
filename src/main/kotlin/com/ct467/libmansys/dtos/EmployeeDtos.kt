@@ -20,6 +20,14 @@ data class ResponseEmployee(
     val fullName: String,
     val birthDate: LocalDate,
     val phoneNumber: String,
-    val username: String?,
+    val deleted: Boolean,
+    val account: ResponseAccountForEmployee?
+)
+
+data class ResponseEmployeeForAccount(
+    val id: Long?,
+    val fullName: String,
+    val birthDate: LocalDate,
+    val phoneNumber: String,
     val deleted: Boolean
 )

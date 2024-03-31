@@ -3,6 +3,7 @@ package com.ct467.libmansys.converters
 import com.ct467.libmansys.dtos.AccountPrincipal
 import com.ct467.libmansys.dtos.CreateAccount
 import com.ct467.libmansys.dtos.ResponseAccount
+import com.ct467.libmansys.dtos.ResponseAccountForEmployee
 import com.ct467.libmansys.models.Account
 import com.ct467.libmansys.models.Employee
 import org.springframework.security.core.userdetails.UserDetails
@@ -23,7 +24,16 @@ fun Account.toResponse(): ResponseAccount {
         username = this.username,
         role = this.role,
         enabled = this.enabled,
-        employee = this.employee?.toResponse()
+        employee = this.employee?.toResponseForAccount()
+    )
+}
+
+fun Account.toResponseForEmployee(): ResponseAccountForEmployee {
+    return ResponseAccountForEmployee(
+        id = this.id,
+        username = this.username,
+        role = this.role,
+        enabled = this.enabled,
     )
 }
 
