@@ -50,13 +50,16 @@ class CheckoutDetailService(
 
     fun updateCheckoutDetail(checkoutId: Long, bookId: Long, requestCheckoutDetail: RequestCheckoutDetail): ResponseCheckoutDetail {
         val checkoutDetail = checkoutDetailRepository
-            .findById(CheckoutDetailId(checkoutId, bookId))
+            .findByCheckout_IdAndBook_Id(checkoutId, bookId)
             .orElseThrow { EntityWithIdNotFoundException(objectName = "Checkout detail", id = "checkout_id: $checkoutId, book_id: $bookId") }
             .apply {
                 note = requestCheckoutDetail.note.toString()
                 if (!returned && requestCheckoutDetail.returned) {
                     returned = true
                     returnDate = LocalDate.now()
+                } else {
+                    returned = false
+                    returnDate = null
                 }
             }
         val updatedCheckoutDetail = checkoutDetailRepository.save(checkoutDetail)
@@ -64,10 +67,10 @@ class CheckoutDetailService(
     }
 
     fun deleteCheckoutDetail(checkoutId: Long, bookId: Long){
-        if(!checkoutDetailRepository.existsById(CheckoutDetailId(checkoutId, bookId))){
+        if(!checkoutDetailRepository.existsByCheckout_IdAndBook_Id(checkoutId, bookId)){
             throw EntityWithIdNotFoundException(objectName = "Checkout detail", id = "checkout_id: $checkoutId, book_id: $bookId")
         }
 
-        return checkoutDetailRepository.deleteById(CheckoutDetailId(checkoutId, bookId))
+        return checkoutDetailRepository.deleteByCheckout_IdAndBook_Id(checkoutId, bookId)
     }
 }

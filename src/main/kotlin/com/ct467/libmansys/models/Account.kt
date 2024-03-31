@@ -26,7 +26,6 @@ class Account(
     @OneToOne(
         mappedBy = "account",
         fetch = FetchType.LAZY,
-        cascade = [CascadeType.PERSIST, CascadeType.MERGE],
         targetEntity = Employee::class
     )
     var employee: Employee? = null
@@ -40,7 +39,7 @@ class Account(
         if (password != other.password) return false
         if (role != other.role) return false
         if (enabled != other.enabled) return false
-        if (employee != other.employee) return false
+
 
         return true
     }

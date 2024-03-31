@@ -59,7 +59,8 @@ class LibraryCardService(
 
         val libraryCard = requestLibraryCard.toEntity(
             reader = reader,
-            startDate = LocalDate.now()
+            startDate = LocalDate.now(),
+            expirationDate = LocalDate.now().plusMonths(requestLibraryCard.cardDuration)
         )
 
         val createdLibraryCard = libraryCardRepository.save(libraryCard)
@@ -79,11 +80,10 @@ class LibraryCardService(
         val oldLibraryCard = reader.libraryCard
             ?: throw AssociatedEntityNotFoundException("Library card", "Reader", readerId.toString())
 
-        val newLibraryCard = requestLibraryCard.toEntity(
-            cardNumber = oldLibraryCard.cardNumber,
-            reader = oldLibraryCard.reader,
-            startDate = oldLibraryCard.startDate
-        )
+        val newLibraryCard = oldLibraryCard.apply {
+            this.expirationDate = this.expirationDate.plusMonths(requestLibraryCard.cardDuration)
+            this.note = requestLibraryCard.note
+        }
 
         val updatedLibraryCard = libraryCardRepository.save(newLibraryCard)
         return updatedLibraryCard.toResponse()

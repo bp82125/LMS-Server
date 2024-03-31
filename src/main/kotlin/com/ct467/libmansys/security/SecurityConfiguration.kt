@@ -78,7 +78,6 @@ class SecurityConfiguration(
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
 
         return http.build()
-
     }
 
     @Bean

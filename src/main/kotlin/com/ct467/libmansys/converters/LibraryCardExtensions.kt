@@ -6,11 +6,11 @@ import com.ct467.libmansys.models.LibraryCard
 import com.ct467.libmansys.models.Reader
 import java.time.LocalDate
 
-fun RequestLibraryCard.toEntity(cardNumber: Long? = null, startDate: LocalDate, reader: Reader?): LibraryCard {
+fun RequestLibraryCard.toEntity(cardNumber: Long? = null, startDate: LocalDate, expirationDate: LocalDate, reader: Reader?): LibraryCard {
     return LibraryCard(
         cardNumber = cardNumber,
         startDate = startDate,
-        expirationDate = startDate.plusMonths(this.cardDuration),
+        expirationDate = expirationDate,
         note = this.note,
         reader = reader
     )
