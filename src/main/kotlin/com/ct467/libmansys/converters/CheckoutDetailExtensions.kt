@@ -1,6 +1,7 @@
 package com.ct467.libmansys.converters
 
 import com.ct467.libmansys.dtos.RequestCheckoutDetail
+import com.ct467.libmansys.dtos.RequestCheckoutDetailForList
 import com.ct467.libmansys.dtos.ResponseCheckoutDetail
 import com.ct467.libmansys.models.Book
 import com.ct467.libmansys.models.Checkout
@@ -17,6 +18,15 @@ fun CheckoutDetail.toResponse(): ResponseCheckoutDetail {
 }
 
 fun RequestCheckoutDetail.toEntity(checkout: Checkout, book: Book): CheckoutDetail {
+    return CheckoutDetail(
+        checkout = checkout,
+        book = book,
+        note = this.note ?: "",
+        returned = this.returned
+    )
+}
+
+fun RequestCheckoutDetailForList.toEntity(checkout: Checkout, book: Book): CheckoutDetail {
     return CheckoutDetail(
         checkout = checkout,
         book = book,

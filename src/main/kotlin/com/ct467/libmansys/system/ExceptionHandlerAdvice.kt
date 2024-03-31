@@ -61,9 +61,9 @@ class ExceptionHandlerAdvice {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse)
     }
 
-    @ExceptionHandler(EntityAlreadyAssociatedException::class)
+    @ExceptionHandler(value = [EntityAlreadyAssociatedException::class, CheckoutDetailAlreadyExistsException::class])
     @ResponseBody
-    fun handleEntityAlreadyAssociatedException(ex: EntityAlreadyAssociatedException): ResponseEntity<ApiResponse<Void>> {
+    fun handleEntityAlreadyAssociatedException(ex: Exception): ResponseEntity<ApiResponse<Void>> {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
             ApiResponse(
                 flag = false,

@@ -15,3 +15,9 @@ data class ResponseCheckoutDetail(
     val returned: Boolean,
     val returnDate: LocalDate?
 )
+
+data class RequestCheckoutDetailForList(
+    val bookId: Long,
+    val note: String?,
+    val returned: Boolean = false
+)

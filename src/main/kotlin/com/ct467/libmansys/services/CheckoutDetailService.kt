@@ -3,7 +3,10 @@ package com.ct467.libmansys.services
 import com.ct467.libmansys.converters.toEntity
 import com.ct467.libmansys.converters.toResponse
 import com.ct467.libmansys.dtos.RequestCheckoutDetail
+import com.ct467.libmansys.dtos.RequestCheckoutDetailForList
 import com.ct467.libmansys.dtos.ResponseCheckoutDetail
+import com.ct467.libmansys.exceptions.CheckoutDetailAlreadyExistsException
+import com.ct467.libmansys.exceptions.EntityAlreadyAssociatedException
 import com.ct467.libmansys.exceptions.EntityWithIdNotFoundException
 import com.ct467.libmansys.models.compositekeys.CheckoutDetailId
 import com.ct467.libmansys.repositories.BookRepository
@@ -43,9 +46,39 @@ class CheckoutDetailService(
             .orElseThrow { EntityWithIdNotFoundException(objectName = "Book", id = "$bookId") }
             .also { if (it.deleted) throw EntityWithIdNotFoundException(objectName = "Book", id = "$bookId") }
 
+        if (checkoutDetailRepository.existsByCheckout_IdAndBook_Id(checkoutId, bookId)) {
+            throw CheckoutDetailAlreadyExistsException(checkoutId, bookId)
+        }
+
         val checkoutDetail = requestCheckoutDetail.toEntity(checkout, book)
         val createdCheckoutDetail = checkoutDetailRepository.save(checkoutDetail)
         return createdCheckoutDetail.toResponse()
+    }
+
+    fun createMultipleCheckoutDetails(checkoutId: Long, requestCheckoutDetailForLists: List<RequestCheckoutDetailForList>): List<ResponseCheckoutDetail> {
+        val checkout = checkoutRepository
+            .findById(checkoutId)
+            .orElseThrow { EntityWithIdNotFoundException(objectName = "Checkout", id = "$checkoutId") }
+
+        val createdDetails = mutableListOf<ResponseCheckoutDetail>()
+
+        for (requestDetail in requestCheckoutDetailForLists) {
+            val bookId = requestDetail.bookId
+            val book = bookRepository
+                .findById(bookId)
+                .orElseThrow { EntityWithIdNotFoundException(objectName = "Book", id = "$bookId") }
+                .also { if (it.deleted) throw EntityWithIdNotFoundException(objectName = "Book", id = "$bookId") }
+
+            if (checkoutDetailRepository.existsByCheckout_IdAndBook_Id(checkoutId, bookId)) {
+                throw CheckoutDetailAlreadyExistsException(checkoutId, bookId)
+            }
+
+            val checkoutDetail = requestDetail.toEntity(checkout, book)
+            val createdCheckoutDetail = checkoutDetailRepository.save(checkoutDetail)
+            createdDetails.add(createdCheckoutDetail.toResponse())
+        }
+
+        return createdDetails
     }
 
     fun updateCheckoutDetail(checkoutId: Long, bookId: Long, requestCheckoutDetail: RequestCheckoutDetail): ResponseCheckoutDetail {
@@ -73,4 +106,5 @@ class CheckoutDetailService(
 
         return checkoutDetailRepository.deleteByCheckout_IdAndBook_Id(checkoutId, bookId)
     }
+
 }

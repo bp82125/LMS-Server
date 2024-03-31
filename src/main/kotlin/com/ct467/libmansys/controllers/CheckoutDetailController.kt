@@ -1,6 +1,7 @@
 package com.ct467.libmansys.controllers
 
 import com.ct467.libmansys.dtos.RequestCheckoutDetail
+import com.ct467.libmansys.dtos.RequestCheckoutDetailForList
 import com.ct467.libmansys.dtos.ResponseCheckoutDetail
 import com.ct467.libmansys.models.CheckoutDetail
 import com.ct467.libmansys.services.CheckoutDetailService
@@ -64,6 +65,22 @@ class CheckoutDetailController (
                 statusCode = HttpStatus.CREATED.value(),
                 data = createdDetail,
                 message = "Created detail of checkoutId: $checkoutId and bookId: $bookId"
+            )
+        )
+    }
+
+    @PostMapping("/{checkoutId}/details", "/{checkoutId}/details/")
+    fun createMultipleCheckoutDetails(
+        @PathVariable checkoutId: Long,
+        @RequestBody requestCheckoutDetailForLists: List<RequestCheckoutDetailForList>
+    ): ResponseEntity<ApiResponse<List<ResponseCheckoutDetail>>> {
+        val createdDetails = checkoutDetailService.createMultipleCheckoutDetails(checkoutId, requestCheckoutDetailForLists)
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+            ApiResponse(
+                flag = true,
+                statusCode = HttpStatus.CREATED.value(),
+                data = createdDetails,
+                message = "Created ${createdDetails.size} detail(s) for checkoutId: $checkoutId"
             )
         )
     }
