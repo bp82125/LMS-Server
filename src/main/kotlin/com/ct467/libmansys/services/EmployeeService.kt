@@ -39,11 +39,16 @@ class EmployeeService(
     }
 
     fun updateEmployee(id: Long, requestEmployee: RequestEmployee): ResponseEmployee {
-        if (!employeeRepository.existsById(id)) {
-            throw EntityWithIdNotFoundException("Employee", "$id")
+        val employee = employeeRepository
+            .findById(id)
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Employee", id = "$id") }
+
+        employee.apply {
+            this.fullName = requestEmployee.fullName
+            this.phoneNumber = requestEmployee.phoneNumber
+            this.birthDate = requestEmployee.birthDate
         }
 
-        val employee = requestEmployee.toEntity(id)
         val updatedEmployee = employeeRepository.save(employee)
         return updatedEmployee.toResponse()
     }
