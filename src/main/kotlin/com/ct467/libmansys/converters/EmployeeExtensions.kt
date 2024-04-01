@@ -2,6 +2,7 @@ package com.ct467.libmansys.converters
 
 import com.ct467.libmansys.dtos.RequestEmployee
 import com.ct467.libmansys.dtos.ResponseEmployee
+import com.ct467.libmansys.dtos.ResponseEmployeeCount
 import com.ct467.libmansys.dtos.ResponseEmployeeForAccount
 import com.ct467.libmansys.models.Employee
 
@@ -32,5 +33,13 @@ fun Employee.toResponseForAccount(): ResponseEmployeeForAccount {
         birthDate = this.birthDate,
         phoneNumber = this.phoneNumber,
         deleted = this.deleted
+    )
+}
+
+fun Employee.toQuantity(): ResponseEmployeeCount {
+    return ResponseEmployeeCount(
+        id = this.id,
+        fullName = this.fullName,
+        numberOfCheckouts = this.checkouts.size
     )
 }

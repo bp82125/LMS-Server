@@ -16,4 +16,6 @@ interface CheckoutDetailRepository : JpaRepository<CheckoutDetail, CheckoutDetai
     fun deleteByCheckout_IdAndBook_Id(checkoutId: Long, bookId: Long)
 
     fun existsByCheckout_IdAndBook_Id(checkoutId: Long, bookId: Long): Boolean
+
+    fun countByBook_Id(bookId: Long): Int
 }

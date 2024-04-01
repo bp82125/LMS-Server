@@ -19,3 +19,15 @@ data class ResponseReader(
     val libraryCard: ResponseLibraryCard?,
     val deleted: Boolean
 )
+
+data class ResponseReaderCount(
+    val id: Long?,
+    val readerName: String,
+    val numberOfBooks: Int?,
+    val numberOfCheckouts: Int?
+)
+
+data class ResponseReaderTotal(
+    val readers: List<ResponseReaderCount>,
+    val numberOfReaders: Int
+)

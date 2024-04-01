@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController
 class CheckoutDetailController (
     @Autowired private val checkoutDetailService: CheckoutDetailService
 ) {
+
     @GetMapping("/{checkoutId}/details", "/{checkoutId}/details/")
     fun findAllDetailsOfCheckout(@PathVariable checkoutId: Long) : ResponseEntity<ApiResponse<List<CheckoutDetail>>> {
         val details = checkoutDetailService.findAllDetails(checkoutId)

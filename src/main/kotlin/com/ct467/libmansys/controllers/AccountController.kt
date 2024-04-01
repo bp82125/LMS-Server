@@ -21,6 +21,21 @@ import org.springframework.web.bind.annotation.RestController
 class AccountController (
     @Autowired private val accountService: AccountService
 ) {
+
+    @GetMapping("/accounts/totals", "/accounts/totals/")
+    fun countAllAccounts(): ResponseEntity<ApiResponse<List<Any>>> {
+        val totals = accountService.countTotal()
+        return ResponseEntity.ok(
+            ApiResponse(
+                flag = true,
+                statusCode = HttpStatus.OK.value(),
+                data = mapOf("numberOfAccounts" to totals),
+                message = "Found total count of accounts"
+            )
+        )
+    }
+
+
     @GetMapping("/accounts", "/accounts/")
     fun findAllAccounts(): ResponseEntity<ApiResponse<List<ResponseAccount>>> {
         val accounts = accountService.findAllAccounts()
@@ -33,6 +48,7 @@ class AccountController (
             )
         )
     }
+
 
     @GetMapping("/{employeeId}/accounts", "/{employeeId}/accounts/")
     fun findAccountByEmployeeId(
@@ -109,6 +125,24 @@ class AccountController (
                 statusCode = HttpStatus.OK.value(),
                 data = account,
                 message = "Password reset successfully for account of employee with id: $employeeId"
+            )
+        )
+    }
+
+
+
+    @PatchMapping("/{employeeId}/accounts/password-change", "/{employeeId}/accounts/password-change/")
+    fun changePassword(
+        @PathVariable employeeId: Long,
+        @Valid @RequestBody passwordAccount: ChangePasswordAccount
+    ): ResponseEntity<ApiResponse<ResponseAccount>>  {
+        val account = accountService.changePassword(employeeId, passwordAccount)
+        return ResponseEntity.ok(
+            ApiResponse(
+                flag = true,
+                statusCode = HttpStatus.OK.value(),
+                data = account,
+                message = "Password changed successfully for account of employee with id: $employeeId"
             )
         )
     }

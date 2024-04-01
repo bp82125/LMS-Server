@@ -1,7 +1,5 @@
 package com.ct467.libmansys.dtos
 
-import com.ct467.libmansys.models.CheckoutDetail
-import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import java.time.LocalDate
 
@@ -19,4 +17,14 @@ data class ResponseCheckout(
     val employee: ResponseEmployee?,
     val checkoutDate: LocalDate,
     val returnedAll: Boolean
+)
+
+data class ResponseCheckoutCount(
+    val id: Long?,
+    val numberOfDetails: Int
+)
+
+data class ResponseCheckoutTotal(
+    val checkouts: List<ResponseCheckoutCount>,
+    val numberOfCheckouts: Int
 )

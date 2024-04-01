@@ -20,3 +20,14 @@ data class ResponseLibraryCard(
     val readerId: Long?,
     val deleted: Boolean
 )
+
+data class ResponseLibraryCardCount(
+    val cardNumber: Long?,
+    val numberOfBooks: Int,
+    val numberOfCheckouts: Int
+)
+
+data class ResponseLibraryCardTotal(
+    val libraryCards: List<ResponseLibraryCardCount>,
+    val numberOfLibraryCards: Int
+)

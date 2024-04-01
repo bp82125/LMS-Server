@@ -17,6 +17,19 @@ import org.springframework.web.bind.annotation.*
 class BookController(
     @Autowired private val bookService: BookService
 ) {
+    @GetMapping("/totals", "/totals/")
+    fun countAllBooks(): ResponseEntity<ApiResponse<List<Any>>> {
+        val totals = bookService.countTotal()
+        return ResponseEntity.ok(
+            ApiResponse(
+                flag = true,
+                statusCode = HttpStatus.OK.value(),
+                data = totals,
+                message = "Found total count of books"
+            )
+        )
+    }
+
     @GetMapping("", "/")
     fun findAllBooks(
         @RequestParam(required = false, defaultValue = "available") status: String?,

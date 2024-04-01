@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface CheckoutRepository : JpaRepository<Checkout, Long>
+interface CheckoutRepository : JpaRepository<Checkout, Long> {
+    fun countByEmployeeId(employeeId: Long): Long
+}

@@ -1,9 +1,11 @@
 package com.ct467.libmansys.services
 
 import com.ct467.libmansys.converters.toEntity
+import com.ct467.libmansys.converters.toQuantity
 import com.ct467.libmansys.converters.toResponse
 import com.ct467.libmansys.dtos.RequestReader
 import com.ct467.libmansys.dtos.ResponseReader
+import com.ct467.libmansys.dtos.ResponseReaderTotal
 import com.ct467.libmansys.exceptions.EntityWithIdNotFoundException
 import com.ct467.libmansys.repositories.LibraryCardRepository
 import com.ct467.libmansys.repositories.ReaderRepository
@@ -17,6 +19,13 @@ class ReaderService(
     @Autowired private val readerRepository: ReaderRepository,
     @Autowired private val libraryCardRepository: LibraryCardRepository
 ) {
+    fun countTotal(): ResponseReaderTotal {
+        val readers = readerRepository.findAll()
+        return ResponseReaderTotal(
+            readers = readers.map { it.toQuantity() },
+            numberOfReaders = readers.size
+        )
+    }
     fun findAllReaders(status: String? = null): List<ResponseReader> {
         return when (status) {
             "deleted" -> readerRepository.findAllByDeletedTrue().map { it.toResponse() }

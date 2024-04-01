@@ -1,9 +1,11 @@
 package com.ct467.libmansys.services
 
 import com.ct467.libmansys.converters.toEntity
+import com.ct467.libmansys.converters.toQuantity
 import com.ct467.libmansys.converters.toResponse
 import com.ct467.libmansys.dtos.RequestPublisher
 import com.ct467.libmansys.dtos.ResponsePublisher
+import com.ct467.libmansys.dtos.ResponsePublisherTotal
 import com.ct467.libmansys.exceptions.EntityWithIdNotFoundException
 import com.ct467.libmansys.repositories.PublisherRepository
 import jakarta.transaction.Transactional
@@ -15,6 +17,14 @@ import org.springframework.stereotype.Service
 class PublisherService(
     @Autowired private val publisherRepository: PublisherRepository
 ) {
+    fun countTotal(): ResponsePublisherTotal {
+        val publishers = publisherRepository.findAll()
+        return ResponsePublisherTotal(
+            publishers = publishers.map { it.toQuantity() },
+            numberOfPublishers = publishers.size
+        )
+    }
+
     fun findAllPublishers(status: String? = null): List<ResponsePublisher> {
         return when (status) {
             "available" -> publisherRepository.findAllByDeletedFalse().map { it.toResponse() }

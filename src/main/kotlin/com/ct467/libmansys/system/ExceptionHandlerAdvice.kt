@@ -86,6 +86,37 @@ class ExceptionHandlerAdvice {
         )
     }
 
+    @ExceptionHandler(IncorrectPasswordException::class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    fun handleIncorrectPasswordException(ex: IncorrectPasswordException): ResponseEntity<ApiResponse<Map<String, String>>> {
+        val errorMessage = ex.message ?: "Incorrect password provided"
+        return ResponseEntity
+            .status(HttpStatus.UNAUTHORIZED)
+            .body(
+                ApiResponse(
+                    flag = false,
+                    statusCode = HttpStatus.UNAUTHORIZED.value(),
+                    message = errorMessage
+                )
+            )
+    }
+
+    @ExceptionHandler(InvalidPasswordException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleInvalidPasswordException(ex: InvalidPasswordException): ResponseEntity<ApiResponse<Map<String, String>>> {
+        val errorMessage = ex.message ?: "Invalid password provided"
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(
+                ApiResponse(
+                    flag = false,
+                    statusCode =
+                    HttpStatus.BAD_REQUEST.value(),
+                    message = errorMessage
+                )
+            )
+    }
+
     @ExceptionHandler(EntityAssociationException::class)
     @ResponseStatus(HttpStatus.CONFLICT)
     @ResponseBody
@@ -99,10 +130,10 @@ class ExceptionHandlerAdvice {
         )
     }
 
-    @ExceptionHandler(AdminAccountDeletionException::class)
+    @ExceptionHandler(AdminAccountException::class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
-    fun handleAdminAccountDeletionException(ex: AdminAccountDeletionException): ResponseEntity<ApiResponse<Void>> {
+    fun handleAdminAccountDeletionException(ex: AdminAccountException): ResponseEntity<ApiResponse<Void>> {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
             ApiResponse(
                 flag = false,

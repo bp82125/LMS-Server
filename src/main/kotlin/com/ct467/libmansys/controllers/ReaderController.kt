@@ -15,6 +15,19 @@ import org.springframework.web.bind.annotation.*
 class ReaderController(
     @Autowired private val readerService: ReaderService
 ) {
+    @GetMapping("/totals", "/totals/")
+    fun countAllReaders(): ResponseEntity<ApiResponse<List<Any>>> {
+        val totals = readerService.countTotal()
+        return ResponseEntity.ok(
+            ApiResponse(
+                flag = true,
+                statusCode = HttpStatus.OK.value(),
+                data = totals,
+                message = "Found total count of readers"
+            )
+        )
+    }
+
     @GetMapping("", "/")
     fun findAllReaders(
         @RequestParam(required = false, defaultValue = "available") status: String?

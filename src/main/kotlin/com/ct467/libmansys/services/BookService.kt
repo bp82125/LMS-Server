@@ -1,14 +1,14 @@
 package com.ct467.libmansys.services
 
 import com.ct467.libmansys.converters.toEntity
+import com.ct467.libmansys.converters.toQuantity
 import com.ct467.libmansys.converters.toResponse
 import com.ct467.libmansys.dtos.RequestBook
 import com.ct467.libmansys.dtos.ResponseBook
+import com.ct467.libmansys.dtos.ResponseBookQuantity
+import com.ct467.libmansys.dtos.ResponseBookTotal
 import com.ct467.libmansys.exceptions.EntityWithIdNotFoundException
-import com.ct467.libmansys.repositories.AuthorRepository
-import com.ct467.libmansys.repositories.BookRepository
-import com.ct467.libmansys.repositories.CategoryRepository
-import com.ct467.libmansys.repositories.PublisherRepository
+import com.ct467.libmansys.repositories.*
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.jpa.domain.Specification
@@ -20,8 +20,26 @@ class BookService(
     @Autowired private val bookRepository: BookRepository,
     @Autowired private val authorRepository: AuthorRepository,
     @Autowired private val publisherRepository: PublisherRepository,
-    @Autowired private val categoryRepository: CategoryRepository
+    @Autowired private val categoryRepository: CategoryRepository,
+    @Autowired private val checkoutDetailRepository: CheckoutDetailRepository
 ) {
+    fun countTotal(): ResponseBookTotal {
+        val booksWithQuantity = bookRepository.findAll()
+            .mapNotNull { book ->
+                book.id?.let { id ->
+                    val quantity = checkoutDetailRepository.countByBook_Id(id)
+                    book.toQuantity(quantity)
+                }
+            }
+
+        val numberOfBooks = booksWithQuantity.size
+
+        return ResponseBookTotal(
+            books = booksWithQuantity,
+            numberOfBooks = numberOfBooks
+        )
+    }
+
     fun findAllBooks(status: String? = null): List<ResponseBook> {
         return when (status) {
             "available" -> bookRepository.findAllByDeletedFalse().map { it.toResponse() }

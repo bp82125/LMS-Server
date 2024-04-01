@@ -30,6 +30,10 @@ class Account(
     )
     var employee: Employee? = null
 ) {
+    fun isAdmin(): Boolean {
+        return role == AccountRole.ADMIN
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Account) return false

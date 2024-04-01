@@ -24,6 +24,10 @@ class CheckoutDetailService(
     @Autowired private val checkoutRepository: CheckoutRepository,
     @Autowired private val bookRepository: BookRepository
 ) {
+    fun countTotal(checkoutId: Long): Int {
+        return checkoutDetailRepository.findAllByCheckout_Id(checkoutId).count()
+    }
+
     fun findAllDetails(checkoutId: Long): List<ResponseCheckoutDetail> {
         return checkoutDetailRepository.findAllByCheckout_Id(checkoutId).map { it.toResponse() }
     }

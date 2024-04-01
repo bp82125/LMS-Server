@@ -16,6 +16,19 @@ import org.springframework.web.bind.annotation.*
 class PublisherController(
     @Autowired private val publisherService: PublisherService
 ) {
+    @GetMapping("/totals", "/totals/")
+    fun countAllPublishers(): ResponseEntity<ApiResponse<List<Any>>> {
+        val totals = publisherService.countTotal()
+        return ResponseEntity.ok(
+            ApiResponse(
+                flag = true,
+                statusCode = HttpStatus.OK.value(),
+                data = totals,
+                message = "Found total count of publishers"
+            )
+        )
+    }
+
     @GetMapping("", "/")
     fun findAllPublishers(
         @RequestParam(required = false, defaultValue = "available") status: String?,
