@@ -99,6 +99,20 @@ class ExceptionHandlerAdvice {
         )
     }
 
+    @ExceptionHandler(AdminAccountDeletionException::class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    fun handleAdminAccountDeletionException(ex: AdminAccountDeletionException): ResponseEntity<ApiResponse<Void>> {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+            ApiResponse(
+                flag = false,
+                statusCode = HttpStatus.FORBIDDEN.value(),
+                message = ex.message ?: "Deleting admin account is not allowed"
+            )
+        )
+    }
+
+
     @ExceptionHandler(MethodArgumentNotValidException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
