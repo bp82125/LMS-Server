@@ -29,6 +29,10 @@ class Checkout(
     )
     var checkoutDetails: List<CheckoutDetail> = mutableListOf()
 ) {
+
+    fun returnedAll(): Boolean {
+        return checkoutDetails.all { it.returned }
+    }
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Checkout) return false

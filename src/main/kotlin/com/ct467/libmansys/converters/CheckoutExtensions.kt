@@ -21,5 +21,6 @@ fun Checkout.toResponse(): ResponseCheckout {
         libraryCard = this.libraryCard?.toResponse(),
         employee = this.employee?.toResponse(),
         checkoutDate = this.checkoutDate,
+        returnedAll = this.returnedAll()
     )
 }

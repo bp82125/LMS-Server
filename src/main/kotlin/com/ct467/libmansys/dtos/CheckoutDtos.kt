@@ -18,4 +18,5 @@ data class ResponseCheckout(
     val libraryCard: ResponseLibraryCard?,
     val employee: ResponseEmployee?,
     val checkoutDate: LocalDate,
+    val returnedAll: Boolean
 )

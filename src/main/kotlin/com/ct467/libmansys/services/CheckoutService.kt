@@ -5,12 +5,14 @@ import com.ct467.libmansys.converters.toResponse
 import com.ct467.libmansys.dtos.RequestCheckout
 import com.ct467.libmansys.dtos.ResponseCheckout
 import com.ct467.libmansys.exceptions.EntityWithIdNotFoundException
+import com.ct467.libmansys.exceptions.LibraryCardExpiredException
 import com.ct467.libmansys.repositories.CheckoutRepository
 import com.ct467.libmansys.repositories.EmployeeRepository
 import com.ct467.libmansys.repositories.LibraryCardRepository
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.time.LocalDate
 
 @Service
 @Transactional
@@ -40,6 +42,10 @@ class CheckoutService(
             .findById(requestCheckout.employeeId)
             .orElseThrow { EntityWithIdNotFoundException(objectName =  "Employee", id = "${requestCheckout.employeeId}") }
             .also { if (it.deleted) throw EntityWithIdNotFoundException(objectName =  "Employee", id = "${requestCheckout.employeeId}")}
+
+        if (libraryCard.expirationDate < LocalDate.now()) {
+            throw LibraryCardExpiredException(libraryCard.cardNumber!!)
+        }
 
         val checkout = requestCheckout.toEntity(libraryCard = libraryCard, employee = employee)
         val createdCheckout = checkoutRepository.save(checkout)
@@ -75,5 +81,4 @@ class CheckoutService(
 
         return checkoutRepository.deleteById(id)
     }
-
 }

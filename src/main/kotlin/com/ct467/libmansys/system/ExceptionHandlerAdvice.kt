@@ -112,6 +112,18 @@ class ExceptionHandlerAdvice {
         )
     }
 
+    @ExceptionHandler(LibraryCardExpiredException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    fun handleLibraryCardExpiredException(ex: LibraryCardExpiredException): ResponseEntity<ApiResponse<Void>> {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+            ApiResponse(
+                flag = false,
+                statusCode = HttpStatus.BAD_REQUEST.value(),
+                message = ex.message ?: "Library card is expired and cannot be used to borrow books"
+            )
+        )
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
