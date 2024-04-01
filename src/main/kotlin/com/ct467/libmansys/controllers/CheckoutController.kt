@@ -22,6 +22,19 @@ import org.springframework.web.bind.annotation.RestController
 class CheckoutController(
     @Autowired private val checkoutService: CheckoutService
 ) {
+    @GetMapping("/totals", "/totals/")
+    fun countAllCheckouts(): ResponseEntity<ApiResponse<List<Any>>> {
+        val totals = checkoutService.countTotal()
+        return ResponseEntity.ok(
+            ApiResponse(
+                flag = true,
+                statusCode = HttpStatus.OK.value(),
+                data = totals,
+                message = "Found total count of checkouts"
+            )
+        )
+    }
+
     @GetMapping("", "/")
     fun findAllCheckouts(): ResponseEntity<ApiResponse<List<ResponseCheckout>>> {
         val checkouts = checkoutService.findAllCheckouts()

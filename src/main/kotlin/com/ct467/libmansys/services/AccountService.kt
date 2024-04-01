@@ -22,6 +22,11 @@ class AccountService(
     @Autowired private val employeeRepository: EmployeeRepository,
     @Autowired private val passwordEncoder: PasswordEncoder
 ): UserDetailsService {
+
+    fun countTotal(): Int {
+        return accountRepository.findAll().count()
+    }
+
     fun findAllAccounts(): List<ResponseAccount> {
         return accountRepository.findAll().map { it.toResponse() }
     }

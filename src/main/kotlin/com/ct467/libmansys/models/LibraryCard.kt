@@ -37,6 +37,14 @@ class LibraryCard(
     @Column(name = "deleted", nullable = false)
     var deleted: Boolean = false,
 ) {
+    fun countCheckouts(): Int {
+        return checkouts.size
+    }
+
+    fun countDetails(): Int {
+        return checkouts.fold(0) {acc, checkout -> acc + checkout.countDetails() }
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is LibraryCard) return false

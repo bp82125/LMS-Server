@@ -25,6 +25,14 @@ class Employee(
 
     @Column(name = "deleted", nullable = false)
     var deleted: Boolean = false,
+
+    @OneToMany(
+        mappedBy = "employee",
+        fetch = FetchType.LAZY,
+        cascade = [CascadeType.ALL],
+        targetEntity = Checkout::class
+    )
+    var checkouts: List<Checkout> = mutableListOf(),
 ) {
 
     fun removeAccount() {

@@ -33,6 +33,10 @@ class Checkout(
     fun returnedAll(): Boolean {
         return checkoutDetails.all { it.returned }
     }
+
+    fun countDetails(): Int {
+        return checkoutDetails.size
+    }
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Checkout) return false

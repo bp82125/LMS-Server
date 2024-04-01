@@ -2,6 +2,7 @@ package com.ct467.libmansys.converters
 
 import com.ct467.libmansys.dtos.RequestBook
 import com.ct467.libmansys.dtos.ResponseBook
+import com.ct467.libmansys.dtos.ResponseBookQuantity
 import com.ct467.libmansys.models.Author
 import com.ct467.libmansys.models.Book
 import com.ct467.libmansys.models.Category
@@ -27,5 +28,13 @@ fun Book.toResponse(): ResponseBook {
         category = this.category?.toResponse(),
         publisher = this.publisher?.toResponse(),
         deleted = this.deleted
+    )
+}
+
+fun Book.toQuantity(numberOfCheckouts: Int): ResponseBookQuantity {
+    return ResponseBookQuantity(
+        id = this.id,
+        bookName = this.bookName,
+        numberOfCheckouts = numberOfCheckouts
     )
 }

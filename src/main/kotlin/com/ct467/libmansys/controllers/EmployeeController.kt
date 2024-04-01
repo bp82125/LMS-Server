@@ -15,6 +15,19 @@ import org.springframework.web.bind.annotation.*
 class EmployeeController(
     @Autowired private val employeeService: EmployeeService
 ) {
+    @GetMapping("/totals", "/totals/")
+    fun countAllEmployees(): ResponseEntity<ApiResponse<List<Any>>> {
+        val totals = employeeService.countTotal()
+        return ResponseEntity.ok(
+            ApiResponse(
+                flag = true,
+                statusCode = HttpStatus.OK.value(),
+                data = totals,
+                message = "Found total count of employees"
+            )
+        )
+    }
+
     @GetMapping("", "/")
     fun findAllEmployees(@RequestParam(required = false, defaultValue = "available") status: String?): ResponseEntity<ApiResponse<List<ResponseEmployee>>> {
         val employees = employeeService.findAllEmployees(status)

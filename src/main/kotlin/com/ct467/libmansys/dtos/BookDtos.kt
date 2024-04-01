@@ -34,3 +34,14 @@ data class ResponseBook(
     val publisher: ResponsePublisher?,
     val deleted: Boolean
 )
+
+data class ResponseBookQuantity(
+    val id: Long?,
+    val bookName: String,
+    val numberOfCheckouts: Int
+)
+
+data class ResponseBookTotal(
+    val books: List<ResponseBookQuantity>,
+    val numberOfBooks: Int
+)

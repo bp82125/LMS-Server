@@ -21,3 +21,14 @@ data class ResponseAuthor(
     val note: String,
     val numberOfBooks: Int
 )
+
+data class ResponseAuthorQuantity(
+    val id: Long?,
+    val authorName: String,
+    val numberOfBooks: Int
+)
+
+data class ResponseAuthorTotal(
+    val authors: List<ResponseAuthorQuantity>,
+    val numberOfAuthors: Int
+)

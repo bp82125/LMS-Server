@@ -15,6 +15,19 @@ import org.springframework.web.bind.annotation.*
 class CategoryController(
     @Autowired private val categoryService: CategoryService
 ) {
+    @GetMapping("/totals", "/totals/")
+    fun countAllCategories(): ResponseEntity<ApiResponse<List<Any>>> {
+        val totals = categoryService.countTotal()
+        return ResponseEntity.ok(
+            ApiResponse(
+                flag = true,
+                statusCode = HttpStatus.OK.value(),
+                data = totals,
+                message = "Found total count of categories"
+            )
+        )
+    }
+
     @GetMapping("", "/")
     fun findAllCategories(
         @RequestParam(required = false, defaultValue = "available") status: String?,

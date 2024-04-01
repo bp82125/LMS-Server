@@ -2,6 +2,7 @@ package com.ct467.libmansys.controllers
 
 import com.ct467.libmansys.dtos.RequestAuthor
 import com.ct467.libmansys.dtos.ResponseAuthor
+import com.ct467.libmansys.dtos.ResponseAuthorTotal
 import com.ct467.libmansys.services.AuthorService
 import com.ct467.libmansys.system.ApiResponse
 import jakarta.validation.Valid
@@ -15,6 +16,19 @@ import org.springframework.web.bind.annotation.*
 class AuthorController(
     @Autowired private val authorService: AuthorService
 ) {
+    @GetMapping("/totals", "/totals/")
+    fun countAllAuthors(): ResponseEntity<ApiResponse<List<ResponseAuthorTotal>>> {
+        val totals = authorService.countTotal()
+        return ResponseEntity.ok(
+            ApiResponse(
+                flag = true,
+                statusCode = HttpStatus.OK.value(),
+                data = totals,
+                message = "Found total count of authors"
+            )
+        )
+    }
+
     @GetMapping("", "/")
     fun findAllAuthors(
         @RequestParam(required = false, defaultValue = "available") status: String?,

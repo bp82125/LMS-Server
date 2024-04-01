@@ -13,3 +13,8 @@ data class ResponseCategory(
     val categoryName: String,
     val numberOfBooks: Int
 )
+
+data class ResponseCategoryTotal(
+    val categories: List<ResponseCategory>,
+    val numberOfCategories: Int
+)

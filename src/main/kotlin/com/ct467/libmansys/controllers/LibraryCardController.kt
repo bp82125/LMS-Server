@@ -15,6 +15,19 @@ import org.springframework.web.bind.annotation.*
 class LibraryCardController(
     @Autowired private val libraryCardService: LibraryCardService
 ) {
+    @GetMapping("/library-cards/totals", "/library-cards/totals/")
+    fun countAllCheckouts(): ResponseEntity<ApiResponse<List<Any>>> {
+        val totals = libraryCardService.countTotal()
+        return ResponseEntity.ok(
+            ApiResponse(
+                flag = true,
+                statusCode = HttpStatus.OK.value(),
+                data = totals,
+                message = "Found total count of library cards"
+            )
+        )
+    }
+
     @GetMapping("/library-cards", "/library-cards/")
     fun findAllLibraryCards(
         @RequestParam(required = false, defaultValue = "available") status: String?

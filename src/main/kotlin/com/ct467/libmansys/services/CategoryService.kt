@@ -4,6 +4,7 @@ import com.ct467.libmansys.converters.toEntity
 import com.ct467.libmansys.converters.toResponse
 import com.ct467.libmansys.dtos.RequestCategory
 import com.ct467.libmansys.dtos.ResponseCategory
+import com.ct467.libmansys.dtos.ResponseCategoryTotal
 import com.ct467.libmansys.exceptions.EntityWithIdNotFoundException
 import com.ct467.libmansys.repositories.CategoryRepository
 import jakarta.transaction.Transactional
@@ -15,6 +16,14 @@ import org.springframework.stereotype.Service
 class CategoryService(
     @Autowired private val categoryRepository: CategoryRepository
 ) {
+    fun countTotal(): ResponseCategoryTotal {
+        val categories = categoryRepository.findAll()
+        return ResponseCategoryTotal(
+            categories = categories.map { it.toResponse() },
+            numberOfCategories = categories.size
+        )
+
+    }
     fun findAllCategories(status: String? = null): List<ResponseCategory> {
         return when (status) {
             "available" -> categoryRepository.findAllByDeletedFalse().map { it.toResponse() }

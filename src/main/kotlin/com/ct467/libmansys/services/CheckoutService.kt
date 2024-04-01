@@ -1,9 +1,11 @@
 package com.ct467.libmansys.services
 
 import com.ct467.libmansys.converters.toEntity
+import com.ct467.libmansys.converters.toQuantity
 import com.ct467.libmansys.converters.toResponse
 import com.ct467.libmansys.dtos.RequestCheckout
 import com.ct467.libmansys.dtos.ResponseCheckout
+import com.ct467.libmansys.dtos.ResponseCheckoutTotal
 import com.ct467.libmansys.exceptions.EntityWithIdNotFoundException
 import com.ct467.libmansys.exceptions.LibraryCardExpiredException
 import com.ct467.libmansys.repositories.CheckoutRepository
@@ -21,6 +23,14 @@ class CheckoutService(
     @Autowired private val libraryCardRepository: LibraryCardRepository,
     @Autowired private val employeeRepository: EmployeeRepository
 ) {
+    fun countTotal(): ResponseCheckoutTotal {
+        val checkouts = checkoutRepository.findAll()
+        return ResponseCheckoutTotal(
+            checkouts = checkouts.map { it.toQuantity() },
+            numberOfCheckouts = checkouts.size
+        )
+    }
+
     fun findAllCheckouts(): List<ResponseCheckout> {
         return checkoutRepository.findAll().map { it.toResponse() }
     }

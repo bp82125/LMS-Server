@@ -2,6 +2,7 @@ package com.ct467.libmansys.converters
 
 import com.ct467.libmansys.dtos.RequestCheckout
 import com.ct467.libmansys.dtos.ResponseCheckout
+import com.ct467.libmansys.dtos.ResponseCheckoutCount
 import com.ct467.libmansys.models.Checkout
 import com.ct467.libmansys.models.Employee
 import com.ct467.libmansys.models.LibraryCard
@@ -22,5 +23,12 @@ fun Checkout.toResponse(): ResponseCheckout {
         employee = this.employee?.toResponse(),
         checkoutDate = this.checkoutDate,
         returnedAll = this.returnedAll()
+    )
+}
+
+fun Checkout.toQuantity(): ResponseCheckoutCount {
+    return ResponseCheckoutCount(
+        id = this.id,
+        numberOfDetails = this.checkoutDetails.count()
     )
 }

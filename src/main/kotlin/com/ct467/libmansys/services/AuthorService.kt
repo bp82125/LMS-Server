@@ -1,9 +1,11 @@
 package com.ct467.libmansys.services
 
 import com.ct467.libmansys.converters.toEntity
+import com.ct467.libmansys.converters.toQuantity
 import com.ct467.libmansys.converters.toResponse
 import com.ct467.libmansys.dtos.RequestAuthor
 import com.ct467.libmansys.dtos.ResponseAuthor
+import com.ct467.libmansys.dtos.ResponseAuthorTotal
 import com.ct467.libmansys.exceptions.EntityWithIdNotFoundException
 import com.ct467.libmansys.repositories.AuthorRepository
 import jakarta.transaction.Transactional
@@ -15,6 +17,16 @@ import org.springframework.stereotype.Service
 class AuthorService(
     @Autowired private val authorRepository: AuthorRepository
 ) {
+    fun countTotal(): ResponseAuthorTotal {
+        val authors = authorRepository.findAllByDeletedFalse()
+
+        return ResponseAuthorTotal(
+            authors = authors.map { it.toQuantity() },
+            numberOfAuthors = authors.size
+        )
+
+    }
+
     fun findAllAuthors(status: String? = null): List<ResponseAuthor> {
         return when (status) {
             "available" -> authorRepository.findAllByDeletedFalse().map { it.toResponse() }

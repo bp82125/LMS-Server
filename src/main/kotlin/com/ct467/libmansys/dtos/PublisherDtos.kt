@@ -25,3 +25,14 @@ data class ResponsePublisher(
     val representativeInfo: String,
     val numberOfBooks: Int
 )
+
+data class ResponsePublisherCount(
+    val id: Long?,
+    val publisherName: String,
+    val numberOfBooks: Int
+)
+
+data class ResponsePublisherTotal(
+    val publishers: List<ResponsePublisherCount>,
+    val numberOfPublishers: Int
+)

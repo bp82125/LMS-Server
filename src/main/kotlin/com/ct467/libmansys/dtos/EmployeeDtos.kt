@@ -31,3 +31,14 @@ data class ResponseEmployeeForAccount(
     val phoneNumber: String,
     val deleted: Boolean
 )
+
+data class ResponseEmployeeCount(
+    val id: Long?,
+    val fullName: String,
+    val numberOfCheckouts: Int
+)
+
+data class ResponseEmployeeTotal(
+    val employees: List<ResponseEmployeeCount?>,
+    val numberOfEmployees: Int
+)

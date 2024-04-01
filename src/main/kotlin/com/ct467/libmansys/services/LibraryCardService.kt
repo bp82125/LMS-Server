@@ -1,9 +1,11 @@
 package com.ct467.libmansys.services
 
+import com.ct467.libmansys.converters.toQuantity
 import com.ct467.libmansys.converters.toEntity
 import com.ct467.libmansys.converters.toResponse
 import com.ct467.libmansys.dtos.RequestLibraryCard
 import com.ct467.libmansys.dtos.ResponseLibraryCard
+import com.ct467.libmansys.dtos.ResponseLibraryCardTotal
 import com.ct467.libmansys.exceptions.AssociatedEntityNotFoundException
 import com.ct467.libmansys.exceptions.EntityAlreadyAssociatedException
 import com.ct467.libmansys.exceptions.EntityWithIdNotFoundException
@@ -18,8 +20,16 @@ import java.time.LocalDate
 @Transactional
 class LibraryCardService(
     @Autowired private val libraryCardRepository: LibraryCardRepository,
-    @Autowired private val readerRepository: ReaderRepository
+    @Autowired private val readerRepository: ReaderRepository,
 ) {
+    fun countTotal(): ResponseLibraryCardTotal {
+        val libraryCards = libraryCardRepository.findAll()
+        return ResponseLibraryCardTotal(
+            libraryCards = libraryCards.map { it.toQuantity() },
+            numberOfLibraryCards = libraryCards.size
+        )
+    }
+
     fun findAllLibraryCards(status: String? = null): List<ResponseLibraryCard> {
         return when (status) {
             "deleted" -> libraryCardRepository.findAllByDeletedTrue().map { it.toResponse() }

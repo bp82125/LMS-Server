@@ -21,6 +21,21 @@ import org.springframework.web.bind.annotation.RestController
 class AccountController (
     @Autowired private val accountService: AccountService
 ) {
+
+    @GetMapping("/accounts/totals", "/accounts/totals/")
+    fun countAllAccounts(): ResponseEntity<ApiResponse<List<Any>>> {
+        val totals = accountService.countTotal()
+        return ResponseEntity.ok(
+            ApiResponse(
+                flag = true,
+                statusCode = HttpStatus.OK.value(),
+                data = mapOf("numberOfAccounts" to totals),
+                message = "Found total count of accounts"
+            )
+        )
+    }
+
+
     @GetMapping("/accounts", "/accounts/")
     fun findAllAccounts(): ResponseEntity<ApiResponse<List<ResponseAccount>>> {
         val accounts = accountService.findAllAccounts()
@@ -33,6 +48,7 @@ class AccountController (
             )
         )
     }
+
 
     @GetMapping("/{employeeId}/accounts", "/{employeeId}/accounts/")
     fun findAccountByEmployeeId(
