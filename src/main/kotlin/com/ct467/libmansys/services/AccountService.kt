@@ -61,6 +61,10 @@ class AccountService(
             throw UsernameAlreadyExistsException(createAccount.username)
         }
 
+        if (!isValidPassword(createAccount.password)) {
+            throw InvalidPasswordException()
+        }
+
         val account = createAccount
             .toEntity(employee = employee)
             .apply {
@@ -85,6 +89,10 @@ class AccountService(
         val account = employee.account
             ?: throw AssociatedEntityNotFoundException(entityName =  "Account", association =  "Employee", id = employeeId.toString())
 
+        if(account.isAdmin()) {
+            throw AdminAccountException()
+        }
+
 
         account.apply { this.role = updateRoleAccount.role }
         return accountRepository.save(account).toResponse()
@@ -99,9 +107,40 @@ class AccountService(
         val account = employee.account
             ?: throw AssociatedEntityNotFoundException(entityName =  "Account", association =  "Employee", id = employeeId.toString())
 
+        if(account.username == "admin") {
+            throw AdminAccountException()
+        }
+
         account.password = passwordEncoder.encode(passwordAccount.newPassword)
         return accountRepository.save(account).toResponse()
     }
+
+    fun changePassword(employeeId: Long, passwordAccount: ChangePasswordAccount): ResponseAccount {
+        val employee = employeeRepository
+            .findById(employeeId)
+            .orElseThrow { EntityWithIdNotFoundException(objectName =  "Employee", id = "$employeeId") }
+            .also { if (it.deleted) throw EntityWithIdNotFoundException(objectName = "Account", id = "$employeeId") }
+
+        val account = employee.account
+            ?: throw AssociatedEntityNotFoundException(entityName =  "Account", association =  "Employee", id = employeeId.toString())
+
+        if (!passwordEncoder.matches(passwordAccount.oldPassword, account.password)) {
+            throw IncorrectPasswordException()
+        }
+
+        if (!isValidPassword(passwordAccount.newPassword)) {
+            throw InvalidPasswordException()
+        }
+
+        account.password = passwordEncoder.encode(passwordAccount.newPassword)
+        return accountRepository.save(account).toResponse()
+    }
+
+    fun isValidPassword(password: String): Boolean {
+        val pattern = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%^&*()-_=+\\\\|\\[{\\]};:'\",<.>/?]).{8,}\$".toRegex()
+        return pattern.matches(password)
+    }
+
 
     fun toggleAccount(employeeId: Long, toggleAccount: ToggleAccount): ResponseAccount {
         val employee = employeeRepository
@@ -111,6 +150,10 @@ class AccountService(
 
         val account = employee.account
             ?: throw AssociatedEntityNotFoundException(entityName =  "Account", association =  "Employee", id = employeeId.toString())
+
+        if(account.username == "admin") {
+            throw AdminAccountException()
+        }
 
         account.enabled = toggleAccount.enabled
         return accountRepository.save(account).toResponse()
@@ -124,10 +167,6 @@ class AccountService(
 
         val account = employee.account
             ?: throw AssociatedEntityNotFoundException(entityName =  "Account", association =  "Employee", id = employeeId.toString())
-
-        if(account.username == "admin") {
-            throw AdminAccountDeletionException()
-        }
 
         employee.removeAccount()
         employeeRepository.save(employee)

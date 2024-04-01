@@ -129,6 +129,24 @@ class AccountController (
         )
     }
 
+
+
+    @PatchMapping("/{employeeId}/accounts/password-change", "/{employeeId}/accounts/password-change/")
+    fun changePassword(
+        @PathVariable employeeId: Long,
+        @Valid @RequestBody passwordAccount: ChangePasswordAccount
+    ): ResponseEntity<ApiResponse<ResponseAccount>>  {
+        val account = accountService.changePassword(employeeId, passwordAccount)
+        return ResponseEntity.ok(
+            ApiResponse(
+                flag = true,
+                statusCode = HttpStatus.OK.value(),
+                data = account,
+                message = "Password changed successfully for account of employee with id: $employeeId"
+            )
+        )
+    }
+
     @DeleteMapping("/{employeeId}/accounts", "/{employeeId}/accounts/")
     fun deleteAccount(
         @PathVariable employeeId: Long

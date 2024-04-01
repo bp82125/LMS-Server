@@ -64,6 +64,7 @@ class SecurityConfiguration(
                     .requestMatchers(HttpMethod.POST, "${this.baseUrl}/employees/**").hasAuthority("ADMIN")
                     .requestMatchers(HttpMethod.PUT, "${this.baseUrl}/employees/**").hasAuthority("ADMIN")
                     .requestMatchers(HttpMethod.DELETE, "${this.baseUrl}/employees/**").hasAuthority("ADMIN")
+                    .requestMatchers(HttpMethod.POST, "${this.baseUrl}/employees/*/accounts/password-change").authenticated()
                     .anyRequest().authenticated()
             }
             .httpBasic{ it

@@ -46,6 +46,18 @@ data class ResetPasswordAccount(
     var newPassword: String
 )
 
+data class ChangePasswordAccount(
+    @field:NotBlank(message = "Old password must not be blank")
+    var oldPassword: String,
+
+    @field:NotBlank(message = "New password must not be blank")
+    @field:Pattern(
+        regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%^&*()-_=+\\\\|\\[{\\]};:'\",<.>/?]).{8,}\$",
+        message = "New password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character"
+    )
+    var newPassword: String
+)
+
 data class ResponseAccount(
     val id: Long?,
     val username: String,
