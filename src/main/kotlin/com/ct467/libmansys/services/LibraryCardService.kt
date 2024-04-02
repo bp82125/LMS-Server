@@ -107,7 +107,7 @@ class LibraryCardService(
         val libraryCard = reader.libraryCard
             ?: throw AssociatedEntityNotFoundException(entityName = "Reader", id = "$readerId", association = "Library card")
 
-        libraryCard.apply { this.deleted = true }
+        libraryCard.apply { this.deleted = !this.deleted }
         libraryCardRepository.save(libraryCard)
     }
 }
