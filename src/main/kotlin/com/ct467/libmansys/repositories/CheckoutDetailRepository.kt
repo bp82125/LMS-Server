@@ -1,8 +1,10 @@
 package com.ct467.libmansys.repositories
 
+import com.ct467.libmansys.models.Checkout
 import com.ct467.libmansys.models.CheckoutDetail
 import com.ct467.libmansys.models.compositekeys.CheckoutDetailId
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 import java.util.Optional
 
@@ -18,4 +20,5 @@ interface CheckoutDetailRepository : JpaRepository<CheckoutDetail, CheckoutDetai
     fun existsByCheckout_IdAndBook_Id(checkoutId: Long, bookId: Long): Boolean
 
     fun countByBook_Id(bookId: Long): Int
+
 }

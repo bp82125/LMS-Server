@@ -5,8 +5,8 @@ import com.ct467.libmansys.converters.toResponse
 import com.ct467.libmansys.dtos.RequestCheckoutDetail
 import com.ct467.libmansys.dtos.RequestCheckoutDetailForList
 import com.ct467.libmansys.dtos.ResponseCheckoutDetail
+import com.ct467.libmansys.exceptions.BookNotReturnedException
 import com.ct467.libmansys.exceptions.CheckoutDetailAlreadyExistsException
-import com.ct467.libmansys.exceptions.EntityAlreadyAssociatedException
 import com.ct467.libmansys.exceptions.EntityWithIdNotFoundException
 import com.ct467.libmansys.models.compositekeys.CheckoutDetailId
 import com.ct467.libmansys.repositories.BookRepository
@@ -49,6 +49,21 @@ class CheckoutDetailService(
             .findById(bookId)
             .orElseThrow { EntityWithIdNotFoundException(objectName = "Book", id = "$bookId") }
             .also { if (it.deleted) throw EntityWithIdNotFoundException(objectName = "Book", id = "$bookId") }
+
+        val cardNumber = checkout.libraryCard?.cardNumber
+
+        if (cardNumber != null) {
+            val bookNotReturnCheckouts = checkoutRepository.findCheckoutsByCardNumberAndBookIdAndNotReturned(cardNumber, bookId)
+            if(bookNotReturnCheckouts.isNotEmpty()){
+                checkoutRepository.deleteById(checkoutId)
+                throw BookNotReturnedException(
+                    "Book with ID: $bookId has not returned in the previous checkout made by library card with number: $cardNumber" ,
+                    book.toResponse(),
+                    bookNotReturnCheckouts.map { it.toResponse() }
+                )
+            }
+
+        }
 
         if (checkoutDetailRepository.existsByCheckout_IdAndBook_Id(checkoutId, bookId)) {
             throw CheckoutDetailAlreadyExistsException(checkoutId, bookId)

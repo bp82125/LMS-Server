@@ -156,6 +156,24 @@ class ExceptionHandlerAdvice {
         )
     }
 
+    @ExceptionHandler(BookNotReturnedException::class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    fun handleBookNotReturnedException(exception: BookNotReturnedException): ResponseEntity<ApiResponse<Unit>>{
+        val book = exception.book
+        val checkouts = exception.checkouts
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+            ApiResponse(
+                flag = false,
+                statusCode = HttpStatus.CONFLICT.value(),
+                data = book,
+                message = exception.message ?: "Book not returned",
+                error = checkouts
+            )
+        )
+
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody

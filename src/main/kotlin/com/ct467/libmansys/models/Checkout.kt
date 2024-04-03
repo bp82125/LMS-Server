@@ -31,6 +31,9 @@ class Checkout(
 ) {
 
     fun returnedAll(): Boolean {
+        if(checkoutDetails.isEmpty()){
+            return false
+        }
         return checkoutDetails.all { it.returned }
     }
 
@@ -60,5 +63,4 @@ class Checkout(
     override fun toString(): String {
         return "Checkout(id=$id, libraryCard=$libraryCard, employee=$employee, checkoutDate=$checkoutDate)"
     }
-
 }
