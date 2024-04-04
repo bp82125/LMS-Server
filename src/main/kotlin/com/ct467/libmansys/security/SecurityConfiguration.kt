@@ -13,7 +13,6 @@ import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
-import org.springframework.security.config.web.server.ServerHttpSecurity.http
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.oauth2.jwt.JwtDecoder
@@ -60,9 +59,9 @@ class SecurityConfiguration(
                     .requestMatchers(HttpMethod.GET, "${this.baseUrl}/categories/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "${this.baseUrl}/publishers/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "${this.baseUrl}/authors/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "${this.baseUrl}/employees/**").hasAuthority("ADMIN")
+                    .requestMatchers(HttpMethod.GET, "${this.baseUrl}/employees/**").authenticated()
                     .requestMatchers(HttpMethod.POST, "${this.baseUrl}/employees/**").hasAuthority("ADMIN")
-                    .requestMatchers(HttpMethod.PUT, "${this.baseUrl}/employees/**").hasAuthority("ADMIN")
+                    .requestMatchers(HttpMethod.PUT, "${this.baseUrl}/employees/**").authenticated()
                     .requestMatchers(HttpMethod.DELETE, "${this.baseUrl}/employees/**").hasAuthority("ADMIN")
                     .requestMatchers(HttpMethod.POST, "${this.baseUrl}/employees/*/accounts/password-change").authenticated()
                     .anyRequest().authenticated()

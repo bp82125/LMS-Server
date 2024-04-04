@@ -168,6 +168,10 @@ class AccountService(
         val account = employee.account
             ?: throw AssociatedEntityNotFoundException(entityName =  "Account", association =  "Employee", id = employeeId.toString())
 
+        if(account.username == "admin") {
+            throw AdminAccountException()
+        }
+
         employee.removeAccount()
         employeeRepository.save(employee)
 
