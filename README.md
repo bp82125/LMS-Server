@@ -2,7 +2,7 @@
 
 This repository contains the backend service for a Library Management System (LMS), built with Kotlin, Spring Boot, and MySQL.
 
-Check out [LMS-Client](https://github.com/bp82125/LMS-Client)
+Check out [LMS (Client)]([https://github.com/bp82125/LMS-Client](https://github.com/nTrong128/LibraryManagementSystem)
 
 ## Tech Stack
 
