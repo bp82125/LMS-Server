@@ -50,25 +50,30 @@ In your `src/main/resources/application.yaml`, ensure the database and API confi
 Here is an example of what your `application.yaml` should look like:
 
 ```yaml
+server:
+  port: 8080
+
 spring:
+  application:
+    name: LibraryManagementSystem
   datasource:
-    url: 'jdbc:mysql://localhost:3306/lms'
+    url: jdbc:mysql://localhost:3306/lms
     username: root
-    password: your_password
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
+    hibernate:
+      ddl:
+        auto: update
     show-sql: true
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.MySQLDialect
+        dialect: org.hibernate.dialect.MySQL8Dialect
     generate-ddl: true
-    hibernate:
-      ddl:
-        auto: update
-  flyway:
-    baseline-on-migrate: true
-    locations: 'classpath:db/migration'
+
+logging:
+  level:
+    org.springframework.security: TRACE
 
 api:
   endpoint:
